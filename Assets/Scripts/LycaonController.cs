@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LycaonController : MonoBehaviour
 {
@@ -27,7 +28,6 @@ public class LycaonController : MonoBehaviour
 	private float _rotationVelocity;
 	private float _verticalVelocity;
 	private float _terminalVelocity = 53.0f;
-
     // Start is called before the first frame update
     void Start() {
 		_controller = GetComponent<CharacterController>();
@@ -37,6 +37,11 @@ public class LycaonController : MonoBehaviour
 	private void Update() {
 		JumpAndGravity();
 		Move();
+
+		if(Input.GetKeyDown(KeyCode.B)) {
+			// load bitalino config scene
+			SceneManager.LoadScene("SampleScene");
+		}
 	}
 
 	private void JumpAndGravity() {
