@@ -3901,6 +3901,7 @@ MonoBehaviour:
   rotateSpeed: 100
   JumpHeight: 1.2
   Gravity: -15
+  HeartRate: 0
 --- !u!143 &437909984
 CharacterController:
   m_ObjectHideFlags: 0

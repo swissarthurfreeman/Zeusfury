@@ -45,7 +45,6 @@ public class Hybrid8Test : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        Debug.Log("Hybrid8Test.cs start");
         // Initialise object, move these to Awake() ?
         pluxDevManager = new PluxDeviceManager(ScanResults, ConnectionDone, AcquisitionStarted, OnDataReceived, OnEventDetected, OnExceptionRaised);
 
@@ -117,7 +116,7 @@ public class Hybrid8Test : MonoBehaviour
     public void StartButtonFunction()
     {
         // Get the Sampling Rate and Resolution values.
-        samplingRate = int.Parse(SamplingRateDropdown.options[SamplingRateDropdown.value].text);
+        // samplingRate = int.Parse(SamplingRateDropdown.options[SamplingRateDropdown.value].text);
         int resolution = int.Parse(ResolutionDropdown.options[ResolutionDropdown.value].text);
 
         // Initializing the sources array.
@@ -339,7 +338,6 @@ public class Hybrid8Test : MonoBehaviour
         }
     }
 
-    private int heartRate;
 
     // Callback that receives the data acquired from the PLUX devices that are streaming real-time data.
     // nSeq -> Number of sequence identifying the number of the current package of data.
@@ -349,6 +347,9 @@ public class Hybrid8Test : MonoBehaviour
         // Show samples with a 1s interval.
         if (nSeq % samplingRate == 0)
         {
+            if(samplingRate == 100) // witchcraft
+                samplingRate /= 10;
+            
             // Show the current package of data.
             string outputString = "Acquired Data:\n";
             for (int j = 0; j < data.Length; j++)
@@ -357,9 +358,8 @@ public class Hybrid8Test : MonoBehaviour
             }
 
             // Show the values in the GUI.
-            heartRate = data[0];
-            _lycaonController.Print(heartRate);
-            OutputMsgText.text = outputString + "yoyoyo";   // HERE
+            _lycaonController.Print(data[0]);
+            OutputMsgText.text = outputString;   // HERE
         }
     }
 

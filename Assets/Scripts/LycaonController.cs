@@ -28,7 +28,6 @@ public class LycaonController : MonoBehaviour
 	private float _rotationVelocity;
 	private float _verticalVelocity;
 	private float _terminalVelocity = 53.0f;
-	private Hybrid8Test _bitalino;
     // Start is called before the first frame update
     void Start() {
 		_controller = GetComponent<CharacterController>();
@@ -64,8 +63,11 @@ public class LycaonController : MonoBehaviour
 		);
 	}
 
-	public void Print(int heartrate) {
-		Debug.Log(gameObject.transform);
-		Debug.Log(heartrate);
+	
+	public volatile float HeartRate;
+	private volatile int _n_beats = 0;
+	public void Print(int value) {
+		Debug.Log("Mean value =" + value);
+
 	}
 }
