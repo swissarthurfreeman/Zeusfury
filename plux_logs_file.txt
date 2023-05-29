@@ -1,9 +1,0 @@
-New Event raised: 3
-Digital input event - Clock source: 2  Clock value: 0  New input state: 1
-New Event raised: 3
-Digital input event - Clock source: 2  Clock value: 0  New input state: 1
-New Event raised: 3
-Digital input event - Clock source: 2  Clock value: 0  New input state: 0
-New Event raised: 3
-Digital input event - Clock source: 2  Clock value: 0  New input state: 0
-onInterrupt
