@@ -40,6 +40,7 @@ public class Hybrid8Test : MonoBehaviour
     private int BiosignalspluxSoloPID = 532;
     private int MaxLedIntensity = 255;
 
+    private LycaonController _lycaonController;
 
     // Start is called before the first frame update
     private void Start()
@@ -49,7 +50,9 @@ public class Hybrid8Test : MonoBehaviour
         pluxDevManager = new PluxDeviceManager(ScanResults, ConnectionDone, AcquisitionStarted, OnDataReceived, OnEventDetected, OnExceptionRaised);
 
         // Important call for debug purposes by creating a log file in the root directory of the project.
-        pluxDevManager.WelcomeFunctionUnity();    
+        pluxDevManager.WelcomeFunctionUnity();
+
+        _lycaonController = GameObject.Find("Lycaon").GetComponent<LycaonController>();    
     }
 
     // Update function, being constantly invoked by Unity.
@@ -354,8 +357,8 @@ public class Hybrid8Test : MonoBehaviour
             }
 
             // Show the values in the GUI.
-            Debug.Log(outputString);
             heartRate = data[0];
+            _lycaonController.Print(heartRate);
             OutputMsgText.text = outputString + "yoyoyo";   // HERE
         }
     }

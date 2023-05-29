@@ -63,4 +63,9 @@ public class LycaonController : MonoBehaviour
 			new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime
 		);
 	}
+
+	public void Print(int heartrate) {
+		Debug.Log(gameObject.transform);
+		Debug.Log(heartrate);
+	}
 }
