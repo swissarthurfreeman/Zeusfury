@@ -5,30 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class DontDestroy : MonoBehaviour
 {
-    public GameObject canvas;
-    // Start is called before the first frame update
-    void Awake() {
-        DontDestroyOnLoad(canvas);
-    }
+    public static DontDestroy Instance;
 
-    void Start()
-    {
-        CanvasGroup g = canvas.GetComponent<CanvasGroup>();
-        g.interactable = true;
-        g.blocksRaycasts = true;
-        g.alpha = 1;
+    // Start is called before the first frame update
+    void Start() {
+
+    }
+    void Toggle() {
+        CanvasGroup g = GameObject.Find("Canvas").GetComponent<CanvasGroup>();
+        g.interactable = !g.interactable;
+        g.blocksRaycasts = !g.blocksRaycasts;
+        g.alpha = 1 - g.alpha;
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.B)) {
-            
-            CanvasGroup g = canvas.GetComponent<CanvasGroup>();
-            g.interactable = false;
-            g.blocksRaycasts = false;
-            g.alpha = 0;
-            SceneManager.LoadScene("Main Scene");
+            Toggle();
         }
     }
 }

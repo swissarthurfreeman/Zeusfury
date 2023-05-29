@@ -28,20 +28,20 @@ public class LycaonController : MonoBehaviour
 	private float _rotationVelocity;
 	private float _verticalVelocity;
 	private float _terminalVelocity = 53.0f;
+	private Hybrid8Test _bitalino;
     // Start is called before the first frame update
     void Start() {
 		_controller = GetComponent<CharacterController>();
+		GameObject mainPanel = GameObject.Find("MainPanel");
+		//if(mainPanel != null) {
+		//	_bitalino = mainPanel.GetComponent<Hybrid8Test>();
+		//}
     }
 
     // Update is called once per frame
 	private void Update() {
 		JumpAndGravity();
 		Move();
-
-		if(Input.GetKeyDown(KeyCode.B)) {
-			// load bitalino config scene
-			SceneManager.LoadScene("SampleScene");
-		}
 	}
 
 	private void JumpAndGravity() {

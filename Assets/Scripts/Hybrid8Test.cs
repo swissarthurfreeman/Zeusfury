@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Hybrid8Test : MonoBehaviour
 {
     // Class Variables
-    private PluxDeviceManager pluxDevManager;
+    private static PluxDeviceManager pluxDevManager;
 
     // GUI Objects.
     public Button ScanButton;
@@ -40,14 +40,16 @@ public class Hybrid8Test : MonoBehaviour
     private int BiosignalspluxSoloPID = 532;
     private int MaxLedIntensity = 255;
 
+
     // Start is called before the first frame update
     private void Start()
     {
-        // Initialise object
+        Debug.Log("Hybrid8Test.cs start");
+        // Initialise object, move these to Awake() ?
         pluxDevManager = new PluxDeviceManager(ScanResults, ConnectionDone, AcquisitionStarted, OnDataReceived, OnEventDetected, OnExceptionRaised);
 
         // Important call for debug purposes by creating a log file in the root directory of the project.
-        pluxDevManager.WelcomeFunctionUnity();
+        pluxDevManager.WelcomeFunctionUnity();    
     }
 
     // Update function, being constantly invoked by Unity.
@@ -66,7 +68,7 @@ public class Hybrid8Test : MonoBehaviour
                 Console.WriteLine("Application ending after " + Time.time + " seconds");
             }
         }
-        catch (Exception exc)
+        catch (Exception)
         {
             Console.WriteLine("Device already disconnected when the Application Quit.");
         }
@@ -334,6 +336,8 @@ public class Hybrid8Test : MonoBehaviour
         }
     }
 
+    private int heartRate;
+
     // Callback that receives the data acquired from the PLUX devices that are streaming real-time data.
     // nSeq -> Number of sequence identifying the number of the current package of data.
     // data -> Package of data containing the RAW data samples collected from each active channel ([sample_first_active_channel, sample_second_active_channel,...]).
@@ -351,6 +355,7 @@ public class Hybrid8Test : MonoBehaviour
 
             // Show the values in the GUI.
             Debug.Log(outputString);
+            heartRate = data[0];
             OutputMsgText.text = outputString + "yoyoyo";   // HERE
         }
     }
