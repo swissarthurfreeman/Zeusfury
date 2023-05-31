@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using DigitalRuby.LightningBolt;
 using UnityEngine;
 
-public class LightningStrike : MonoBehaviour
+public class ZeusController : MonoBehaviour
 {
     public Camera ZeusCam;
     public GameObject LightningPrefab;
     public float lightningTime = 0.5f;
     public Tobii.Research.Unity.GazeTrailBase gazeTrail;
+    public float moveSpeed = 5;
 
     // Start is called before the first frame update
     void Start()
     {
 
+    }
+
+    void Advance() {
+        //transform.position += Vector3.forward * Time.deltaTime * moveSpeed;
+    }
+
+    void Update() {
+        
     }
 
     // Update is called once per frame

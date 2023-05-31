@@ -86,7 +86,7 @@ public class LycaonController : MonoBehaviour
 
 		if(_n_counts == 50) {	// 5 secs measure
 			_n_counts = 0;
-			Debug.Log("BPM = " + _n_beats * 6);
+			Debug.Log("BPM = " + _n_beats * 12);
 			_n_beats = 0;
 		}
 
