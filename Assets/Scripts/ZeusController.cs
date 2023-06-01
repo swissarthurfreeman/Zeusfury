@@ -9,7 +9,6 @@ public class ZeusController : MonoBehaviour
     public GameObject LightningPrefab;
     public float lightningTime = 0.5f;
     public Tobii.Research.Unity.GazeTrailBase gazeTrail;
-    public float moveSpeed = 5;
 
     // Start is called before the first frame update
     void Start()

@@ -2188,7 +2188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 437909982}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9, y: 5.66, z: 12.3}
+  m_LocalPosition: {x: 9, y: 5.66, z: 19.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2847,8 +2847,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 614385263}
-  m_LocalRotation: {x: 0.17910346, y: -0, z: -0, w: 0.9838303}
-  m_LocalPosition: {x: 0, y: 4.4400005, z: -6.36}
+  m_LocalRotation: {x: 0.17910345, y: -0, z: -0, w: 0.9838303}
+  m_LocalPosition: {x: 0, y: 4.4400005, z: -6.3600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4608,8 +4608,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 895298532}
-  m_LocalRotation: {x: 0.17910346, y: -0, z: -0, w: 0.9838303}
-  m_LocalPosition: {x: 0, y: 4.4400005, z: -6.36}
+  m_LocalRotation: {x: 0.17910345, y: -0, z: -0, w: 0.9838303}
+  m_LocalPosition: {x: 0, y: 4.4400005, z: -6.3600006}
   m_LocalScale: {x: 1.3333334, y: 1.3333334, z: 1.3333334}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5142,6 +5142,9 @@ MonoBehaviour:
   - {fileID: 1822904636}
   - {fileID: 1460070978}
   - {fileID: 2002632717}
+  zeusSpeed: 0
+  maxZeusLycaonDistance: 175
+  catchUpSpeed: 8
 --- !u!4 &1060439328
 Transform:
   m_ObjectHideFlags: 0
@@ -10623,7 +10626,6 @@ MonoBehaviour:
   LightningPrefab: {fileID: 1801035215}
   lightningTime: 0.5
   gazeTrail: {fileID: 1988759902}
-  moveSpeed: 5
 --- !u!1 &2111074982
 GameObject:
   m_ObjectHideFlags: 0
