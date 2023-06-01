@@ -9,35 +9,58 @@ public class GameManager : MonoBehaviour
     private GameObject LycaonBody;
     private CharacterController LycaonCharControl;
 
-    public List<GameObject> strips;
-    public List<GameObject> ends;
-    public List<GameObject> starts; 
+    public GameObject startStrip;
+    public List<GameObject> stripPrefabs;
+    public Queue<GameObject> strips = new Queue<GameObject>();
+    
     [SerializeField]
     private float zeusSpeed;
-    private float zlim;
+    private float zlim = -60;
     private GameObject sky;
+    private GameObject Map;
 
     // Start is called before the first frame update
     void Start()
     {
+        Map = GameObject.Find("Map");
         Zeus = GameObject.Find("Zeus");
         LycaonBody = GameObject.Find("LycaonBody");
         LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
         zeusSpeed = 0f;
         sky = GameObject.Find("Sky");
+
+        strips.Enqueue(startStrip);
+        
+        for(int i = 0; i < stripPrefabs.Count; i++) {
+            GameObject newStrip = Instantiate(stripPrefabs[i]);
+            Bounds precStripBounds = strips.ToArray()[i].GetComponent<BoxCollider>().bounds;
+            Bounds newStripBounds = newStrip.GetComponent<BoxCollider>().bounds;        // ACCESS BOUNDS ON INSTANTIATED !
+            newStrip.transform.position = strips.ToArray()[i].transform.position + Vector3.forward * (precStripBounds.size.z+newStripBounds.size.z) / 2;  // IT'S THE HALF WIDTH !
+            strips.Enqueue(newStrip);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        for(int i=0; i < strips.Count; i++) {
-            strips[i].transform.position += strips[i].transform.forward * gameSpeed * Time.deltaTime;
-            
-            if(ends[i].transform.position.z < zlim) {
-                strips[i].transform.position += ends[ mod(i - 1, ends.Count) ].transform.position - starts[i].transform.position;
-            }
-        }
+        stripRenewal();
         enforceZeusRange();
+    }
+
+    void stripRenewal() {
+        if(strips.ToArray()[0].transform.position.z < zlim) {
+            spawnStrip();
+            Destroy(strips.Dequeue());
+        }
+    }
+
+    void spawnStrip() {
+        int k = Random.Range(0, stripPrefabs.Count);
+        GameObject newStrip = Instantiate(stripPrefabs[k]);
+        Bounds precStripBounds = strips.ToArray()[strips.Count-1].GetComponent<BoxCollider>().bounds;
+        Bounds newStripBounds = newStrip.GetComponent<BoxCollider>().bounds;        // ACCESS BOUNDS ON INSTANTIATED !
+        newStrip.transform.position = strips.ToArray()[strips.Count-1].transform.position + Vector3.forward * (precStripBounds.size.z+newStripBounds.size.z) / 2;  // IT'S THE HALF WIDTH !
+        strips.Enqueue(newStrip);
     }
 
     public float maxZeusLycaonDistance = 150.0f;
