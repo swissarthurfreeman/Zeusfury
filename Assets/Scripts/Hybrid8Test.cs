@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class Hybrid8Test : MonoBehaviour
 {
     // Class Variables
-    private static PluxDeviceManager pluxDevManager;
+    private PluxDeviceManager pluxDevManager;
 
     // GUI Objects.
     public Button ScanButton;
@@ -40,18 +40,16 @@ public class Hybrid8Test : MonoBehaviour
     private int BiosignalspluxSoloPID = 532;
     private int MaxLedIntensity = 255;
 
-    private LycaonController _lycaonController;
-
     // Start is called before the first frame update
     private void Start()
     {
-        // Initialise object, move these to Awake() ?
+        // Initialise object
         pluxDevManager = new PluxDeviceManager(ScanResults, ConnectionDone, AcquisitionStarted, OnDataReceived, OnEventDetected, OnExceptionRaised);
 
         // Important call for debug purposes by creating a log file in the root directory of the project.
         pluxDevManager.WelcomeFunctionUnity();
 
-        _lycaonController = GameObject.Find("Lycaon").GetComponent<LycaonController>();    
+        LycaonController = GameObject.Find("LycaonBody").GetComponent<LycaonController>();
     }
 
     // Update function, being constantly invoked by Unity.
@@ -70,7 +68,7 @@ public class Hybrid8Test : MonoBehaviour
                 Console.WriteLine("Application ending after " + Time.time + " seconds");
             }
         }
-        catch (Exception)
+        catch (Exception exc)
         {
             Console.WriteLine("Device already disconnected when the Application Quit.");
         }
@@ -116,7 +114,7 @@ public class Hybrid8Test : MonoBehaviour
     public void StartButtonFunction()
     {
         // Get the Sampling Rate and Resolution values.
-        // samplingRate = int.Parse(SamplingRateDropdown.options[SamplingRateDropdown.value].text);
+        samplingRate = int.Parse(SamplingRateDropdown.options[SamplingRateDropdown.value].text);
         int resolution = int.Parse(ResolutionDropdown.options[ResolutionDropdown.value].text);
 
         // Initializing the sources array.
@@ -338,6 +336,7 @@ public class Hybrid8Test : MonoBehaviour
         }
     }
 
+    LycaonController LycaonController;
 
     // Callback that receives the data acquired from the PLUX devices that are streaming real-time data.
     // nSeq -> Number of sequence identifying the number of the current package of data.
@@ -347,19 +346,17 @@ public class Hybrid8Test : MonoBehaviour
         // Show samples with a 1s interval.
         if (nSeq % samplingRate == 0)
         {
-            if(samplingRate == 100) // witchcraft
-                samplingRate /= 10;
-            
             // Show the current package of data.
             string outputString = "Acquired Data:\n";
             for (int j = 0; j < data.Length; j++)
             {
                 outputString += data[j] + "\t";
             }
-
+            
+            LycaonController.Print(data[0]);
+            
             // Show the values in the GUI.
-            _lycaonController.Print(data[0]);
-            OutputMsgText.text = outputString;   // HERE
+            OutputMsgText.text = outputString;
         }
     }
 

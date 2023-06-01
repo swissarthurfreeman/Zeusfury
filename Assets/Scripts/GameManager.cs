@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float gameSpeed = 10;
+    public float gameSpeed;
     private GameObject Zeus;
     private GameObject LycaonBody;
     private CharacterController LycaonCharControl;
@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private float zlim = -60;
     private GameObject sky;
     private GameObject Map;
+    private GameObject bitalinoCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -31,13 +32,8 @@ public class GameManager : MonoBehaviour
 
         strips.Enqueue(startStrip);
         
-        for(int i = 0; i < stripPrefabs.Count; i++) {
-            GameObject newStrip = Instantiate(stripPrefabs[i]);
-            Bounds precStripBounds = strips.ToArray()[i].GetComponent<BoxCollider>().bounds;
-            Bounds newStripBounds = newStrip.GetComponent<BoxCollider>().bounds;        // ACCESS BOUNDS ON INSTANTIATED !
-            newStrip.transform.position = strips.ToArray()[i].transform.position + Vector3.forward * (precStripBounds.size.z+newStripBounds.size.z) / 2;  // IT'S THE HALF WIDTH !
-            strips.Enqueue(newStrip);
-        }
+        spawnStrip();
+        spawnStrip();
     }
 
     // Update is called once per frame
@@ -48,7 +44,9 @@ public class GameManager : MonoBehaviour
     }
 
     void stripRenewal() {
-        if(strips.ToArray()[0].transform.position.z < zlim) {
+        GameObject firstStrip = strips.ToArray()[0];
+        Bounds b = firstStrip.GetComponent<Collider>().bounds;
+        if(firstStrip.transform.position.z + b.size.z / 2 < zlim) {
             spawnStrip();
             Destroy(strips.Dequeue());
         }
