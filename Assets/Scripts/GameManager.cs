@@ -6,7 +6,9 @@ public class GameManager : MonoBehaviour
 {
     public float gameSpeed = 10;
     private GameObject Zeus;
+    private GameObject Lycaon;
     private CharacterController LycaonCharControl;
+
     public List<GameObject> strips;
     public List<GameObject> ends;
     public List<GameObject> starts; 
@@ -16,7 +18,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Zeus = GameObject.Find("Zeus");
-        LycaonCharControl = GameObject.Find("Lycaon").GetComponentInChildren<CharacterController>();
+        Lycaon = GameObject.Find("LycaonBody");
+        LycaonCharControl = Lycaon.GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -29,6 +32,10 @@ public class GameManager : MonoBehaviour
                 strips[i].transform.position += ends[ mod(i - 1, ends.Count) ].transform.position - starts[i].transform.position;
             }
         }
+    }
+
+    void enforceZeusRange() {
+        //if(Zeus.transform.position )
     }
 
     void LateUpdate() {
