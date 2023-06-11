@@ -13,23 +13,15 @@ public class GameManager : MonoBehaviour
     public List<GameObject> stripPrefabs;
     public Queue<GameObject> strips = new Queue<GameObject>();
     
-    [SerializeField]
-    private float zeusSpeed;
-    private float zlim;  // gets set to behind Zeus at every update()
-    private GameObject sky;
-    private GameObject Map;
     private GameObject bitalinoCanvas;
+    private float zlim;
 
     // Start is called before the first frame update
     void Start()
-    {
-        Map = GameObject.Find("Map");
-        Zeus = GameObject.Find("Zeus");
+    {    
         LycaonBody = GameObject.Find("LycaonBody");
         LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
-        zeusSpeed = 0f;
-        sky = GameObject.Find("Sky");
-        zlim = GameObject.Find("Zeus").transform.position.z - 100;
+        Zeus = GameObject.Find("Zeus");
 
         strips.Enqueue(startStrip);
         
@@ -41,17 +33,17 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         stripRenewal();
-        enforceZeusRange();
     }
 
     void stripRenewal() {
+        zlim = Zeus.transform.position.z;  // to maintain appropriate despawn distance
+        
         GameObject firstStrip = strips.ToArray()[0];
         Bounds b = firstStrip.GetComponent<Collider>().bounds;
         if(firstStrip.transform.position.z + b.size.z / 2 < zlim) {     // if right side of strip is behind zeus
             spawnStrip();
             Destroy(strips.Dequeue());
         }
-        zlim = GameObject.Find("Zeus").transform.position.z;  // to maintain appropriate despawn distance
     }
 
     void spawnStrip() {
@@ -61,21 +53,6 @@ public class GameManager : MonoBehaviour
         Bounds newStripBounds = newStrip.GetComponent<BoxCollider>().bounds;        // ACCESS BOUNDS ON INSTANTIATED !
         newStrip.transform.position = strips.ToArray()[strips.Count-1].transform.position + Vector3.forward * (precStripBounds.size.z+newStripBounds.size.z) / 2;  // IT'S THE HALF WIDTH !
         strips.Enqueue(newStrip);
-    }
-
-    public float maxZeusLycaonDistance = 150.0f;
-    public float catchUpSpeed = 10.0f;
-    void enforceZeusRange() {
-        Zeus.transform.position += zeusSpeed * Vector3.forward * Time.deltaTime;
-        sky.transform.position += zeusSpeed * Vector3.forward * Time.deltaTime;
-        zlim += zeusSpeed * Time.deltaTime;
-
-        if( (Zeus.transform.position - LycaonBody.transform.position).magnitude >  maxZeusLycaonDistance) {
-            // make Zeus catch up with Lycaon a tad
-            zeusSpeed = LycaonBody.GetComponent<LycaonController>().moveSpeed - gameSpeed + catchUpSpeed;
-        } else {
-            zeusSpeed = 0;
-        }
     }
 
     void LateUpdate() {

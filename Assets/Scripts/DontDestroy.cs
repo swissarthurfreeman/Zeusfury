@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class DontDestroy : MonoBehaviour
 {
-    public static DontDestroy Instance;
+    public static DontDestroy Instance; // TODO : rename to Bitalino Manager
 
     // Start is called before the first frame update
     void Start() {
