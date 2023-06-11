@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     
     [SerializeField]
     private float zeusSpeed;
-    private float zlim = -60;
+    private float zlim;  // gets set to behind Zeus at every update()
     private GameObject sky;
     private GameObject Map;
     private GameObject bitalinoCanvas;
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
         LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
         zeusSpeed = 0f;
         sky = GameObject.Find("Sky");
+        zlim = GameObject.Find("Zeus").transform.position.z - 100;
 
         strips.Enqueue(startStrip);
         
@@ -46,10 +47,11 @@ public class GameManager : MonoBehaviour
     void stripRenewal() {
         GameObject firstStrip = strips.ToArray()[0];
         Bounds b = firstStrip.GetComponent<Collider>().bounds;
-        if(firstStrip.transform.position.z + b.size.z / 2 < zlim) {
+        if(firstStrip.transform.position.z + b.size.z / 2 < zlim) {     // if right side of strip is behind zeus
             spawnStrip();
             Destroy(strips.Dequeue());
         }
+        zlim = GameObject.Find("Zeus").transform.position.z;  // to maintain appropriate despawn distance
     }
 
     void spawnStrip() {
