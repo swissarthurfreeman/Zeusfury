@@ -5783,6 +5783,9 @@ MonoBehaviour:
   - {fileID: 7203603969145912090, guid: 5d052b19d7f65c440a48df86591d20a7, type: 3}
   - {fileID: 1677863225206136750, guid: 1b2202324f31aaf4288d8cd697eca232, type: 3}
   - {fileID: 5489169409020161723, guid: 6b6c157c64a81844988fd16d36e61e16, type: 3}
+  endArea: {fileID: 923883093174693138, guid: bfbcbeef3beaf9b4184e666be8d851a7, type: 3}
+  endGameConditionMet: 0
+  gameTime: 5
 --- !u!4 &1060439328
 Transform:
   m_ObjectHideFlags: 0

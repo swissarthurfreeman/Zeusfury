@@ -8,11 +8,9 @@ public class GameManager : MonoBehaviour
     private GameObject Zeus;
     private GameObject LycaonBody;
     private CharacterController LycaonCharControl;
-
     public GameObject startStrip;
     public List<GameObject> stripPrefabs;
     public Queue<GameObject> strips = new Queue<GameObject>();
-    
     private GameObject bitalinoCanvas;
     private float zlim;
 
@@ -29,15 +27,36 @@ public class GameManager : MonoBehaviour
         spawnStrip();
     }
 
+    public GameObject endArea;
+    public bool endGameConditionMet = false;
+    public float gameTime = 180;    // default three minutes long game.
+
     // Update is called once per frame
-    void Update()
-    {
-        stripRenewal();
+    void Update() {
+        gameTime -= Time.deltaTime;
+        if(gameTime < 0)
+            endGameConditionMet = true;
+
+        if(!endGameConditionMet)
+            stripRenewal();
+        else
+            spawnEnd();
+    }
+
+    private bool endSpawned = false;
+    void spawnEnd() {
+        if(!endSpawned) {
+            endSpawned = true;
+            Bounds precStripBounds = strips.ToArray()[strips.Count-1].GetComponent<BoxCollider>().bounds;
+            Bounds newStripBounds = endArea.GetComponent<BoxCollider>().bounds;
+            Vector3 pos = strips.ToArray()[strips.Count-1].transform.position + Vector3.forward * (precStripBounds.size.z/2 + newStripBounds.size.z + 20);
+            strips.Enqueue(Instantiate(endArea, pos, endArea.transform.rotation));
+        }
     }
 
     void stripRenewal() {
         zlim = Zeus.transform.position.z;  // to maintain appropriate despawn distance
-        
+
         GameObject firstStrip = strips.ToArray()[0];
         Bounds b = firstStrip.GetComponent<Collider>().bounds;
         if(firstStrip.transform.position.z + b.size.z / 2 < zlim) {     // if right side of strip is behind zeus
