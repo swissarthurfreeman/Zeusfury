@@ -16,6 +16,7 @@ public class ZeusController : MonoBehaviour
     public float catchUpSpeed = 10.0f;
     
     private GameObject Zeus;
+
     private GameObject LycaonBody;
     private GameObject sky;
     private float zlim;  // gets set to behind Zeus at every update()
@@ -94,6 +95,8 @@ public class ZeusController : MonoBehaviour
         }
     }
 
+    [Tooltip("Distance beyond the which Lycaon doesn't receive damage from Lightning strikes.")]
+    public float lightningDamageMaxDist = 1.0f; 
     void MouseStrike() {
         mana -= lightningManaCost;
         Vector3 mousePos = Input.mousePosition;
@@ -109,6 +112,11 @@ public class ZeusController : MonoBehaviour
             
             LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
+            
+            float dist = (hit.point - LycaonBody.transform.position).magnitude;
+            Debug.Log(dist);
+            if(dist < lightningDamageMaxDist)
+                LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
         }
     }
 

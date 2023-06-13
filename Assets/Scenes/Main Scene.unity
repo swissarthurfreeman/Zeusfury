@@ -5785,7 +5785,7 @@ MonoBehaviour:
   - {fileID: 5489169409020161723, guid: 6b6c157c64a81844988fd16d36e61e16, type: 3}
   endArea: {fileID: 923883093174693138, guid: bfbcbeef3beaf9b4184e666be8d851a7, type: 3}
   endGameConditionMet: 0
-  gameTime: 5
+  gameTime: 20
 --- !u!4 &1060439328
 Transform:
   m_ObjectHideFlags: 0
@@ -10422,8 +10422,9 @@ MonoBehaviour:
   maxZeusLycaonDistance: 150
   catchUpSpeed: 10
   mana: 100
-  lightningManaCost: 30
+  lightningManaCost: 0
   Nectar: {fileID: 6869462494027392688, guid: cff1114bfc49d1a4682922e869c8d3b4, type: 3}
+  lightningDamageMaxDist: 5
 --- !u!1 &2115464280
 GameObject:
   m_ObjectHideFlags: 0
@@ -10595,6 +10596,18 @@ PrefabInstance:
     - target: {fileID: 1298847604618573608, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
       propertyPath: m_Name
       value: LycaonBody
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298847604618573608, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298847604618573608, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
+      propertyPath: m_TagString
+      value: Lycaon
+      objectReference: {fileID: 0}
+    - target: {fileID: 1298847604618573611, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
+      propertyPath: m_Center.y
+      value: 1.7
       objectReference: {fileID: 0}
     - target: {fileID: 1298847604618573615, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
       propertyPath: m_RootOrder

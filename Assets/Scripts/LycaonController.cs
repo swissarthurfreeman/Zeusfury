@@ -11,6 +11,7 @@ public class LycaonController : MonoBehaviour
 	public float moveSpeed = 4.0f;
 	[Tooltip("Rotation speed of the character camera")]
 	public float rotateSpeed = 100;    
+	[SerializeField]
 	private float verticalVelocity;
     private float groundedTimer;        // to allow jumping when going down ramps
     public float jumpHeight = 8.0f;
@@ -18,6 +19,7 @@ public class LycaonController : MonoBehaviour
 	private CharacterController _controller;
 	public GameObject LycaonBody;
 	private Animator LycaonBodyAnimator;
+
     // Start is called before the first frame update
     void Start() {
 		_controller = GetComponent<CharacterController>();
@@ -30,29 +32,40 @@ public class LycaonController : MonoBehaviour
 		JumpAndGravity();
 		Move();
 	}
-	private void JumpAndGravity() {
-		bool groundedPlayer = _controller.isGrounded;
-        if (groundedPlayer)
-            groundedTimer = 0.2f;	// cooldown interval to allow reliable jumping even whem coming down ramps
 
-        if (groundedTimer > 0)
-            groundedTimer -= Time.deltaTime;
- 
-        // slam into the ground
-        if (groundedPlayer && verticalVelocity < 0)
-            verticalVelocity = 0f;	// hit ground
- 
-        verticalVelocity -= gravityValue * Time.deltaTime;	// apply gravity always, to let us track down ramps properly
- 
+	[SerializeField]
+	private bool groundedPlayer = false;
+
+	// overloads OnTriggerEnter method of CharacterController 
+	// (which is of type collider)
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+		if(!groundedPlayer && hit.gameObject.CompareTag("Floor")) {
+			Debug.Log("Collided With floor");
+			groundedPlayer = true;
+			LycaonBodyAnimator.SetBool("Jump_b", false);
+			LycaonBodyAnimator.SetBool("Grounded", true);
+		}
+	}
+
+	private void JumpAndGravity() {
+		//if(groundedPlayer && verticalVelocity < 0)
+		//	verticalVelocity = 0.0f;
+
         // allow jump as long as the player is on the ground
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            if (groundedTimer > 0) {	// must have been grounded recently to allow jump
-                groundedTimer = 0;		// no more until we recontact ground
-				LycaonBodyAnimator.SetTrigger("Jump_trig");
-                verticalVelocity += Mathf.Sqrt(jumpHeight * 2 * gravityValue);
-            }
-        }
+		if (Input.GetKeyDown(KeyCode.Space) && groundedPlayer) {
+			LycaonBodyAnimator.SetBool("Jump_b", true);
+			verticalVelocity = Mathf.Sqrt(jumpHeight * 2 * gravityValue);
+			groundedPlayer = false;
+        }	
+
+		if(verticalVelocity < -10 && !groundedPlayer) {	// if falling
+			LycaonBodyAnimator.SetBool("Jump_b", false);
+			LycaonBodyAnimator.SetBool("Grounded", false);
+		}
+
         _controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);	// call .Move() once only
+		if(verticalVelocity > -10)
+			verticalVelocity -= gravityValue * Time.deltaTime;	// apply gravity always, to let us track down ramps properly
 	}
 
 	private bool idle = true;
@@ -73,6 +86,12 @@ public class LycaonController : MonoBehaviour
 			LycaonBodyAnimator.SetBool("Static_b", true);
 			LycaonBodyAnimator.SetFloat("Speed_f", 0f);
 		}
+	}
+
+	public float health = 100.0f;
+	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
+		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
+		Debug.Log("Health = " + health);
 	}
 
 	public float HeartRate;
