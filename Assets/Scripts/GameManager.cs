@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {    
+        Debug.Log(Time.timeScale);
+        Time.timeScale = 0;         // until user clicks play
+
         LycaonBody = GameObject.Find("LycaonBody");
         LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
         Zeus = GameObject.Find("Zeus");
@@ -25,7 +28,12 @@ public class GameManager : MonoBehaviour
         
         spawnStrip();
         spawnStrip();
+    
     }
+
+    public void PlayGame() {
+        Time.timeScale = 1;
+    }    
 
     public GameObject endArea;
     public bool endGameConditionMet = false;

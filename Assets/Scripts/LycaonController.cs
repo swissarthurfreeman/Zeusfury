@@ -31,6 +31,8 @@ public class LycaonController : MonoBehaviour
 	private void Update() {
 		JumpAndGravity();
 		Move();
+		if(health <= 0)
+			Die();
 	}
 
 	[SerializeField]
@@ -44,7 +46,15 @@ public class LycaonController : MonoBehaviour
 			groundedPlayer = true;
 			LycaonBodyAnimator.SetBool("Jump_b", false);
 			LycaonBodyAnimator.SetBool("Grounded", true);
+		} else if(hit.gameObject.CompareTag("Zeus")) {	// if Zeus caught up and touched player
+			Die();
 		}
+	}
+
+	private void Die() {
+		Debug.Log("Lycaon Killed");
+		LycaonBodyAnimator.SetBool("Death_b", true);
+		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
 	}
 
 	private void JumpAndGravity() {
@@ -68,7 +78,6 @@ public class LycaonController : MonoBehaviour
 			verticalVelocity -= gravityValue * Time.deltaTime;	// apply gravity always, to let us track down ramps properly
 	}
 
-	private bool idle = true;
     private void Move() {
 		float vertInput = Input.GetAxis("LycaonMove");
 		float horiInput = Input.GetAxis("LycaonRotate");
