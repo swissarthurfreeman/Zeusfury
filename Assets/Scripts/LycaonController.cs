@@ -25,6 +25,8 @@ public class LycaonController : MonoBehaviour
 		_controller = GetComponent<CharacterController>();
 		GameObject mainPanel = GameObject.Find("MainPanel");
 		LycaonBodyAnimator = LycaonBody.GetComponent<Animator>();
+		gm = GameObject.Find("[GameManager]").GetComponent<GameManager>();
+		manager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
     }
 
     // Update is called once per frame
@@ -51,10 +53,18 @@ public class LycaonController : MonoBehaviour
 		}
 	}
 
+	private GameManager gm;
+	private MenuManager manager;
+
 	private void Die() {
 		Debug.Log("Lycaon Killed");
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
+		gm.lycaonDead = true;
+		enabled = false;
+		
+        Time.timeScale = 0;	// TODO : add delay of a second before toggle. (Use IEnumerator)
+        manager.Toggle();
 	}
 
 	private void JumpAndGravity() {

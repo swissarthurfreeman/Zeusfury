@@ -2630,8 +2630,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1060439327}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1333691097}
+        m_TargetAssemblyTypeName: MenuManager, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
@@ -4389,6 +4389,7 @@ GameObject:
   - component: {fileID: 839348386}
   - component: {fileID: 839348385}
   - component: {fileID: 839348384}
+  - component: {fileID: 839348390}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -4502,6 +4503,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &839348390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 839348383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c8ed9942e474947b7611c6dfb9d28f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 98
 --- !u!1 &854388052
 GameObject:
   m_ObjectHideFlags: 0
@@ -6237,6 +6251,8 @@ MonoBehaviour:
   - {fileID: 5489169409020161723, guid: 6b6c157c64a81844988fd16d36e61e16, type: 3}
   endArea: {fileID: 923883093174693138, guid: bfbcbeef3beaf9b4184e666be8d851a7, type: 3}
   endGameConditionMet: 0
+  lycaonDead: 0
+  lycaonWon: 0
   gameTime: 20
 --- !u!4 &1060439328
 Transform:
@@ -7271,8 +7287,11 @@ GameObject:
   - component: {fileID: 1333691095}
   - component: {fileID: 1333691094}
   - component: {fileID: 1333691093}
+  - component: {fileID: 1333691097}
+  - component: {fileID: 1333691096}
+  - component: {fileID: 1333691098}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7362,6 +7381,44 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1333691096
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333691091}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &1333691097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333691091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c8ed9942e474947b7611c6dfb9d28f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 0
+--- !u!114 &1333691098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333691091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5c8ed9942e474947b7611c6dfb9d28f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: 112
 --- !u!1 &1354179459
 GameObject:
   m_ObjectHideFlags: 0
@@ -11405,6 +11462,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 437909985}
     m_Modifications:
+    - target: {fileID: 1298847604618573606, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1298847604618573608, guid: 410bc6cdbfe8d65469d4bb17122921ea, type: 3}
       propertyPath: m_Name
       value: LycaonBody

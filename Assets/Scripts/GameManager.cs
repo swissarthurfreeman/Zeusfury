@@ -13,30 +13,26 @@ public class GameManager : MonoBehaviour
     public Queue<GameObject> strips = new Queue<GameObject>();
     private GameObject bitalinoCanvas;
     private float zlim;
+    private MenuManager mainMenuManager;
 
     // Start is called before the first frame update
     void Start()
     {    
-        Debug.Log(Time.timeScale);
-        Time.timeScale = 0;         // until user clicks play
-
+        Time.timeScale = 0;
         LycaonBody = GameObject.Find("LycaonBody");
         LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
         Zeus = GameObject.Find("Zeus");
-
+        mainMenuManager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
         strips.Enqueue(startStrip);
         
         spawnStrip();
         spawnStrip();
-    
     }
-
-    public void PlayGame() {
-        Time.timeScale = 1;
-    }    
 
     public GameObject endArea;
     public bool endGameConditionMet = false;
+    public bool lycaonDead = false;
+    public bool lycaonWon = false;
     public float gameTime = 180;    // default three minutes long game.
 
     // Update is called once per frame
