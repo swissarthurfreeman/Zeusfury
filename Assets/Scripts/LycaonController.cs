@@ -33,7 +33,7 @@ public class LycaonController : MonoBehaviour
 	private void Update() {
 		JumpAndGravity();
 		Move();
-		if(health <= 0)
+		if(health <= 0 && !gm.lycaonDead)
 			Die();
 	}
 
@@ -61,10 +61,16 @@ public class LycaonController : MonoBehaviour
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
 		gm.lycaonDead = true;
-		enabled = false;
-		
-        Time.timeScale = 0;	// TODO : add delay of a second before toggle. (Use IEnumerator)
-        manager.Toggle();
+		enabled = false;				// resets animator
+		StartCoroutine(DeathCoroutine());
+	}
+
+	IEnumerator DeathCoroutine() {
+        Debug.Log("Started Coroutine at timestamp : " + Time.time);
+        yield return new WaitForSeconds(2);	// adds delay of two seconds before end screen.
+		Time.timeScale = 0;	
+		Scene s = SceneManager.GetActiveScene();	// TODO : save data here
+		SceneManager.LoadScene(s.name);
 	}
 
 	private void JumpAndGravity() {
