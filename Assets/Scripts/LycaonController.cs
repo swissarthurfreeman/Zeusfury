@@ -37,6 +37,11 @@ public class LycaonController : MonoBehaviour
 			Die();
 	}
 
+	void EndAreaReached() {
+		Debug.Log("Lycaon Reached the end area !");
+		gm.lycaonWon = true;
+	}
+
 	[SerializeField]
 	private bool groundedPlayer = false;
 
@@ -50,6 +55,8 @@ public class LycaonController : MonoBehaviour
 			LycaonBodyAnimator.SetBool("Grounded", true);
 		} else if(hit.gameObject.CompareTag("Zeus")) {	// if Zeus caught up and touched player
 			Die();
+		} else if(hit.gameObject.CompareTag("Tartarus")) {
+			EndAreaReached();
 		}
 	}
 
@@ -60,8 +67,8 @@ public class LycaonController : MonoBehaviour
 		Debug.Log("Lycaon Killed");
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
-		gm.lycaonDead = true;
-		enabled = false;				// resets animator
+		gm.lycaonDead = true;			// TODO : display lycaon wins message
+		enabled = false;				// disables update() of this script
 		StartCoroutine(DeathCoroutine());
 	}
 
@@ -116,7 +123,6 @@ public class LycaonController : MonoBehaviour
 	public float health = 100.0f;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
-		Debug.Log("Health = " + health);
 	}
 
 	public float HeartRate;

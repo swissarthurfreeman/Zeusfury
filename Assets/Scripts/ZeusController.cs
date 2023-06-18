@@ -40,9 +40,11 @@ public class ZeusController : MonoBehaviour
     }
 
     void UpdateMana() {
-        mana -= Time.deltaTime;     // naturally decrease mana as Zeus advances
-        if(mana < 0)
+        mana -= Time.deltaTime;     // naturally decrease mana as Zeus advances, TODO : add mana bar
+        if(mana < lightningManaCost)
             SpawnNectar();
+        else
+            nectarSpawned = false;  // for LateUpdate not to send lightning strike on nectar click
 
         if(nectarSpawned)
             CollectNectar();
@@ -54,7 +56,6 @@ public class ZeusController : MonoBehaviour
             Ray ray = ZeusCam.ScreenPointToRay(mousePos);
             if(Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("Nectar")) {    // if we hit something that is Nectar.
                 Destroy(hit.transform.gameObject);
-                nectarSpawned = false;
                 mana = 100.0f;
             }
         }
@@ -70,6 +71,7 @@ public class ZeusController : MonoBehaviour
     // not already present.
     void SpawnNectar() {
         if(!nectarSpawned) {
+            Debug.Log("Nectar Spawn");
             nectarSpawned = true;
             float spawnDistDepth = Random.Range(minDistDepth, maxDistDepth);
             float spawnWidthBreadth = Random.Range(-maxDistBreadth, maxDistBreadth);
@@ -133,10 +135,12 @@ public class ZeusController : MonoBehaviour
     }
 
     void LateUpdate() {
-        if(mana > lightningManaCost && Input.GetMouseButtonDown(0))
-            MouseStrike();
+        if(!nectarSpawned && mana > lightningManaCost) {
+            if(Input.GetMouseButtonDown(0))
+                MouseStrike();
 
-        if(mana > lightningManaCost && Input.GetKeyDown(KeyCode.Return))
-            EyeTrackerStrike();
+            if(Input.GetKeyDown(KeyCode.Return))
+                EyeTrackerStrike();
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,6 +46,32 @@ public class GameManager : MonoBehaviour
             stripRenewal();
         else
             spawnEnd();
+
+        if(lycaonDead || lycaonWon)
+            StartCoroutine(ReloadGame());
+    }
+
+    public GameObject LycaonBanner;
+    public GameObject ZeusBanner;
+
+    IEnumerator ReloadGame() {
+        if(lycaonDead) {
+            LycaonBanner.GetComponent<TMPro.TextMeshProUGUI>().text = "You Died...";
+            ZeusBanner.GetComponent<TMPro.TextMeshProUGUI>().text = "You win !";
+        }
+
+        if(lycaonWon) {
+            LycaonBanner.GetComponent<TMPro.TextMeshProUGUI>().text = "You Made it !";
+            ZeusBanner.GetComponent<TMPro.TextMeshProUGUI>().text = "You lost...";
+        }
+
+        LycaonBanner.SetActive(true);
+        ZeusBanner.SetActive(true);
+
+        yield return new WaitForSeconds(2);
+        
+        Scene s = SceneManager.GetActiveScene();	// TODO : save data here
+		SceneManager.LoadScene(s.name);
     }
 
     private bool endSpawned = false;
