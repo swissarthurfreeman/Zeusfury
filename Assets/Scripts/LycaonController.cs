@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -140,6 +141,36 @@ public class LycaonController : MonoBehaviour
 			Debug.Log("BPM = " + _n_beats * 12);
 			_n_beats = 0;
 		}
+	}
 
+	public void SetSpeed(){
+		string filePath = Path.Combine(Application.dataPath, "value.txt");
+		if (File.Exists(filePath))
+		{
+			try
+			{
+				using (StreamReader reader = new StreamReader(filePath))
+				{
+					string firstLine = reader.ReadLine();
+					if (float.TryParse(firstLine, out float value))
+					{
+						Debug.Log(value);
+						moveSpeed = 4.0f * value;
+					}
+					else
+					{
+						Debug.Log("La première ligne ne contient pas un numéro valide.");
+					}
+				}
+			}
+			catch (System.Exception ex)
+			{
+				Debug.Log("collision: read again");
+			}
+		}
+		else
+		{
+			Debug.Log("Le fichier n'existe pas.");
+		}
 	}
 }
