@@ -38,7 +38,6 @@ public class LycaonController : MonoBehaviour
 	}
 
 	void EndAreaReached() {
-		Debug.Log("Lycaon Reached the end area !");
 		gm.lycaonWon = true;
 	}
 
@@ -49,7 +48,6 @@ public class LycaonController : MonoBehaviour
 	// (which is of type collider)
 	void OnControllerColliderHit(ControllerColliderHit hit) {
 		if(!groundedPlayer && hit.gameObject.CompareTag("Floor")) {
-			Debug.Log("Collided With floor");
 			groundedPlayer = true;
 			LycaonBodyAnimator.SetBool("Jump_b", false);
 			LycaonBodyAnimator.SetBool("Grounded", true);
@@ -64,7 +62,6 @@ public class LycaonController : MonoBehaviour
 	private MenuManager manager;
 
 	private void Die() {
-		Debug.Log("Lycaon Killed");
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
 		gm.lycaonDead = true;
@@ -73,7 +70,6 @@ public class LycaonController : MonoBehaviour
 	}
 
 	IEnumerator DeathCoroutine() {
-        Debug.Log("Started Coroutine at timestamp : " + Time.time);
         yield return new WaitForSeconds(2);	// adds delay of two seconds before end screen.
 		Time.timeScale = 0;	
 		Scene s = SceneManager.GetActiveScene();	// TODO : save data here

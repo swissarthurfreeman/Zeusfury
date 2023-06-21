@@ -21,6 +21,7 @@ public class ZeusController : MonoBehaviour
     private float gameSpeed; // copy of GameSpeed from Game manager. 
     public float mana = 100.0f;
     public float lightningManaCost = 30.0f;
+    private AudioSource lightningSource;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,7 @@ public class ZeusController : MonoBehaviour
         sky = GameObject.Find("Sky");
         zlim = GameObject.Find("Zeus").transform.position.z - 100;
         gameSpeed = GameObject.Find("[GameManager]").GetComponent<GameManager>().gameSpeed;
+        lightningSource = GetComponent<AudioSource>();
     }
 
     void Update() {
@@ -108,7 +110,6 @@ public class ZeusController : MonoBehaviour
 
             GameObject end = LightningPrefab.transform.GetChild(1).gameObject;
             end.transform.position = hitPoint.Value;
-            
 
             LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
@@ -116,10 +117,12 @@ public class ZeusController : MonoBehaviour
             GameObject explosion = Instantiate(ExplosionSmoke, hitPoint.Value, ExplosionSmoke.transform.rotation);
             explosion.GetComponent<ParticleSystem>().Play();
 
-            float dist = (hitPoint.Value - LycaonBody.transform.position).magnitude;
+            float dist = (hitPoint.Value - LycaonBody.transform.position).magnitude;        // compute distance to Lycaon, deal damage
             if(dist < lightningDamageMaxDist)
                 LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
 
+            lightningSource.pitch = Random.Range(1f, 3.0f);       // play lightning sound
+            lightningSource.Play();
         }
     }
 
