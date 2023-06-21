@@ -19,7 +19,6 @@ public class SpeedPowerup : MonoBehaviour
     }
 
     IEnumerator Debuff() {
-        Debug.Log("Start cooldown");
         yield return new WaitForSeconds(buffDuration);
         ctrl.moveSpeed -= deltaSpeed;     // remove debuff
         Destroy(gameObject);
@@ -27,7 +26,6 @@ public class SpeedPowerup : MonoBehaviour
 
     private float deltaSpeed;
     void OnCollisionEnter(Collision other) {
-        Debug.Log("Colliding");
         if(other.gameObject.CompareTag("Lycaon")) {
             GetComponent<MeshRenderer>().enabled = false;
             deltaSpeed = ctrl.moveSpeed * speedMultiplier;

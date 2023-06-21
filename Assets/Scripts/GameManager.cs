@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
     }
 
     void LateUpdate() {
-        LycaonCharControl.Move(Vector3.back * Time.deltaTime * gameSpeed);
+        //LycaonCharControl.Move(Vector3.back * Time.deltaTime * gameSpeed);
     }
 
     int mod(int x, int m) {

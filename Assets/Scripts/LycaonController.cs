@@ -30,17 +30,11 @@ public class LycaonController : MonoBehaviour
 		manager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
     }
 
-    // Update is called once per frame
 	private void Update() {
 		JumpAndGravity();
 		Move();
-		Powerups();
 		if(health <= 0 && !gm.lycaonDead)
 			Die();
-	}
-
-	void Powerups() {
-		
 	}
 
 	void EndAreaReached() {
@@ -70,22 +64,30 @@ public class LycaonController : MonoBehaviour
 	private void Die() {
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
-		gm.lycaonDead = true;
-		enabled = false;				// disables update() of this script
-		StartCoroutine(DeathCoroutine());
+		moveSpeed = 0;
+		rotateSpeed = 0;
+		jumpHeight = 0;
+		if(gameObject.name == "LycaonBody") {
+			gm.lycaonDead = true;
+			StartCoroutine(DeathCoroutine());
+		} else {
+			StartCoroutine(CleanClone());
+		}
+	}
+
+	IEnumerator CleanClone() {
+		yield return new WaitForSeconds(5);
+		Destroy(gameObject);
 	}
 
 	IEnumerator DeathCoroutine() {
-        yield return new WaitForSeconds(2);	// adds delay of two seconds before end screen.
+        yield return new WaitForSeconds(2);	// adds delay of two seconds before end screen.	
 		Time.timeScale = 0;	
 		Scene s = SceneManager.GetActiveScene();	// TODO : save data here
 		SceneManager.LoadScene(s.name);
 	}
 
 	private void JumpAndGravity() {
-		//if(groundedPlayer && verticalVelocity < 0)
-		//	verticalVelocity = 0.0f;
-
         // allow jump as long as the player is on the ground
 		if (Input.GetKeyDown(KeyCode.Space) && groundedPlayer) {
 			LycaonBodyAnimator.SetBool("Jump_b", true);
@@ -107,7 +109,8 @@ public class LycaonController : MonoBehaviour
 		float vertInput = Input.GetAxis("LycaonMove");
 		float horiInput = Input.GetAxis("LycaonRotate");
 
-		transform.Rotate(Vector3.up, -horiInput * rotateSpeed * Time.deltaTime);
+		if(gameObject.name == "LycaonBody")	// clones get rotated by Powerup
+			transform.Rotate(Vector3.up, -horiInput * rotateSpeed * Time.deltaTime);
 		
 		_controller.Move(
 			transform.forward * vertInput * (moveSpeed * Time.deltaTime)
@@ -142,6 +145,10 @@ public class LycaonController : MonoBehaviour
 			Debug.Log("BPM = " + _n_beats * 12);
 			_n_beats = 0;
 		}
+	}
+
+	void LateUpdate() {
+		_controller.Move(Vector3.back * Time.deltaTime * gm.gameSpeed);
 	}
 
 	public void SetSpeed(){

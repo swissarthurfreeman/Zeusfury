@@ -101,6 +101,7 @@ public class ZeusController : MonoBehaviour
     public float lightningDamageMaxDist = 1.0f; 
     public GameObject ExplosionSmoke;
 
+    [System.Obsolete]
     void LightningStrike() {
         System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
         if(hitPoint.HasValue) {
@@ -115,11 +116,25 @@ public class ZeusController : MonoBehaviour
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
             
             GameObject explosion = Instantiate(ExplosionSmoke, hitPoint.Value, ExplosionSmoke.transform.rotation);
+            explosion.GetComponent<ParticleSystem>().startColor = Color.yellow;
             explosion.GetComponent<ParticleSystem>().Play();
 
-            float dist = (hitPoint.Value - LycaonBody.transform.position).magnitude;        // compute distance to Lycaon, deal damage
-            if(dist < lightningDamageMaxDist)
-                LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
+            GameObject[] lycaons = GameObject.FindGameObjectsWithTag("Lycaon");
+            bool invincible = false;        // lycaon is invincible if he has clones
+            foreach(GameObject lyc in lycaons) {
+                if(lyc.name != "LycaonBody" && lyc.GetComponent<LycaonController>().health > 0)    // e.g. if there's a clone
+                    invincible = true;
+            }
+
+            print(invincible);
+            // lightning may also damage clones
+            foreach(var lyc in lycaons) {
+                if(!(invincible && lyc.name == "LycaonBody")) {
+                    float dist = (hitPoint.Value - lyc.transform.position).magnitude;        // compute distance to Lycaon, deal damage
+                    if(dist < lightningDamageMaxDist)
+                        lyc.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
+                }
+            }
 
             lightningSource.pitch = Random.Range(1f, 3.0f);       // play lightning sound
             lightningSource.Play();
