@@ -67,7 +67,7 @@ public class LycaonController : MonoBehaviour
 		Debug.Log("Lycaon Killed");
 		LycaonBodyAnimator.SetBool("Death_b", true);
 		LycaonBodyAnimator.SetInteger("DeathType_int", 2);
-		gm.lycaonDead = true;			// TODO : display lycaon wins message
+		gm.lycaonDead = true;
 		enabled = false;				// disables update() of this script
 		StartCoroutine(DeathCoroutine());
 	}
@@ -123,6 +123,7 @@ public class LycaonController : MonoBehaviour
 	public float health = 100.0f;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
+		Debug.Log("Lycaon Health = " + health.ToString());
 	}
 
 	public float HeartRate;

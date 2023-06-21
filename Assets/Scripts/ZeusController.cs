@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using DigitalRuby.LightningBolt;
 using UnityEngine;
 
@@ -99,48 +97,50 @@ public class ZeusController : MonoBehaviour
 
     [Tooltip("Distance beyond the which Lycaon doesn't receive damage from Lightning strikes.")]
     public float lightningDamageMaxDist = 1.0f; 
-    void MouseStrike() {
-        mana -= lightningManaCost;
-        Vector3 mousePos = Input.mousePosition;
-        Ray ray = ZeusCam.ScreenPointToRay(mousePos);
 
-        // see https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/out-parameter-modifier
-        if(Physics.Raycast(ray, out RaycastHit hit)) {  // true if intersects a collider
+    void LightningStrike() {
+        System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
+        if(hitPoint.HasValue) {
+            mana -= lightningManaCost;
             GameObject start = LightningPrefab.transform.GetChild(0).gameObject;        // configure lightning bolt
             start.transform.position = transform.position + new Vector3(0, 0, 10);
 
             GameObject end = LightningPrefab.transform.GetChild(1).gameObject;
-            end.transform.position = hit.point;
+            end.transform.position = hitPoint.Value;
             
             LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
             
-            float dist = (hit.point - LycaonBody.transform.position).magnitude;
-            Debug.Log(dist);
+            float dist = (hitPoint.Value - LycaonBody.transform.position).magnitude;
             if(dist < lightningDamageMaxDist)
                 LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
+
         }
     }
 
-    void EyeTrackerStrike() {
-        mana -= lightningManaCost;
-        GameObject start = LightningPrefab.transform.GetChild(0).gameObject;
-        start.transform.position = transform.position + new Vector3(0, 0, 10);
-
-        GameObject end = LightningPrefab.transform.GetChild(1).gameObject;
-        end.transform.position = gazeTrail.latestHitPoint;
+    // Returns the point that was either gazed at or clicked on
+    // click will override the eye tracker
+    // will return null if raycast didn't collide with anything
+    // will return null if neither Enter (for eye tracker) or left mouse
+    // were triggered.
+    System.Nullable<Vector3> GetMouseOrEyeTrackerPoint() {
+        if(Input.GetMouseButtonDown(0)) {
+            Vector3 mousePos = Input.mousePosition;
+            Ray ray = ZeusCam.ScreenPointToRay(mousePos);
+            if(Physics.Raycast(ray, out RaycastHit hit)) { // true if intersects a collider
+                return hit.point;
+            }
+        }
         
-        LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
-        test.Trigger();
+        if(Input.GetKeyDown(KeyCode.Return)) {
+            return gazeTrail.latestHitPoint;    // returns null if no collider was intersected
+        }
+        return null;
     }
 
     void LateUpdate() {
         if(!nectarSpawned && mana > lightningManaCost) {
-            if(Input.GetMouseButtonDown(0))
-                MouseStrike();
-
-            if(Input.GetKeyDown(KeyCode.Return))
-                EyeTrackerStrike();
+            LightningStrike();
         }
     }
 }
