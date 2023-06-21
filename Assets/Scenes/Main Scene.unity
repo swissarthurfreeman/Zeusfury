@@ -2221,7 +2221,7 @@ Transform:
   - {fileID: 614385264}
   - {fileID: 895298533}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &453221625
 GameObject:
@@ -11659,6 +11659,7 @@ MonoBehaviour:
   lightningManaCost: 30
   Nectar: {fileID: 6869462494027392688, guid: cff1114bfc49d1a4682922e869c8d3b4, type: 3}
   lightningDamageMaxDist: 5
+  ExplosionSmoke: {fileID: 2630815748524575241, guid: cb7cd9b0c56a24d49a40784bd3203ae6, type: 3}
 --- !u!1 &2115464280
 GameObject:
   m_ObjectHideFlags: 0
@@ -11906,7 +11907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7203603969145912091, guid: 5d052b19d7f65c440a48df86591d20a7, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7203603969145912091, guid: 5d052b19d7f65c440a48df86591d20a7, type: 3}
       propertyPath: m_LocalPosition.x

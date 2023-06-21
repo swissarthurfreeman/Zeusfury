@@ -97,6 +97,7 @@ public class ZeusController : MonoBehaviour
 
     [Tooltip("Distance beyond the which Lycaon doesn't receive damage from Lightning strikes.")]
     public float lightningDamageMaxDist = 1.0f; 
+    public GameObject ExplosionSmoke;
 
     void LightningStrike() {
         System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
@@ -108,9 +109,13 @@ public class ZeusController : MonoBehaviour
             GameObject end = LightningPrefab.transform.GetChild(1).gameObject;
             end.transform.position = hitPoint.Value;
             
+
             LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
             
+            GameObject explosion = Instantiate(ExplosionSmoke, hitPoint.Value, ExplosionSmoke.transform.rotation);
+            explosion.GetComponent<ParticleSystem>().Play();
+
             float dist = (hitPoint.Value - LycaonBody.transform.position).magnitude;
             if(dist < lightningDamageMaxDist)
                 LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
@@ -122,7 +127,7 @@ public class ZeusController : MonoBehaviour
     // click will override the eye tracker
     // will return null if raycast didn't collide with anything
     // will return null if neither Enter (for eye tracker) or left mouse
-    // were triggered.
+    // were triggered
     System.Nullable<Vector3> GetMouseOrEyeTrackerPoint() {
         if(Input.GetMouseButtonDown(0)) {
             Vector3 mousePos = Input.mousePosition;
