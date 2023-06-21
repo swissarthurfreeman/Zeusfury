@@ -9,15 +9,22 @@ public class MenuManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
-
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = menuMusic;
+        audioSource.Play();
     }
+
+    public AudioClip menuMusic;
+    public AudioClip gameMusic;
+    private AudioSource audioSource;
 
     public void PlayGame() {
         Time.timeScale = 1;
+        audioSource.Stop();
+        Debug.Log("PLAY MUSIC NOW");
+        audioSource.clip = gameMusic;
+        audioSource.Play();
         Toggle();
-        // TODO : add code to reset Lycaon / Zeus to previous state
-        // via override of reset methods in Zeus / LycaonBody, set positions
-        // back and state as was. 
     }
 
     public void Toggle() {
