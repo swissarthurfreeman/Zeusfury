@@ -33,8 +33,13 @@ public class LycaonController : MonoBehaviour
 	private void Update() {
 		JumpAndGravity();
 		Move();
+		Powerups();
 		if(health <= 0 && !gm.lycaonDead)
 			Die();
+	}
+
+	void Powerups() {
+		
 	}
 
 	void EndAreaReached() {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NectarController : MonoBehaviour
+public class RotateCollectible : MonoBehaviour
 {
     public float rotateSpeed = 60.0f;
 

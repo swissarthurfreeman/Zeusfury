@@ -9,6 +9,7 @@ TagManager:
   - Floor
   - Zeus
   - Tartarus
+  - SpeedPowerup
   layers:
   - Default
   - TransparentFX
