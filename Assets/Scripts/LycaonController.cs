@@ -213,7 +213,7 @@ public class LycaonController : MonoBehaviour
 					if (float.TryParse(firstLine, out float value))
 					{
 						Debug.Log(value);
-						moveSpeed = 4.0f * value;
+						moveSpeed = moveSpeed + (8.0f * (value - 1));
 					}
 					else
 					{
