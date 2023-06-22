@@ -181,6 +181,8 @@ public class ZeusController : MonoBehaviour
 		yield return new WaitForSeconds(3.0f);
 		Destroy(game);
 	}
+
+    public GameObject cursor;
     // Returns the point that was either gazed at or clicked on projected on world map
     // click will override the eye tracker
     // will return null if raycast didn't collide with anything
@@ -195,9 +197,12 @@ public class ZeusController : MonoBehaviour
             }
         }
         
-        if(Input.GetKeyDown(KeyCode.Return)) {
-            Debug.Log("Latest Hit Point = " + gazeTrail.latestHitPoint.ToString());
-            return gazeTrail.latestHit;    // returns null if no collider was intersected
+        if(gazeTrail.latestHitPoint != null) {
+            cursor.transform.position = gazeTrail.latestHitPoint;
+            if(Input.GetKeyDown(KeyCode.Return)) {
+                Debug.Log("Latest Hit Point = " + gazeTrail.latestHitPoint.ToString());
+                return gazeTrail.latestHit;    // returns null if no collider was intersected
+            }    
         }
         return null;
     }
