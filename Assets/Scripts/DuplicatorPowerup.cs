@@ -7,6 +7,7 @@ public class DuplicatorPowerup : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        collected = false;
         rotation = Random.Range(5, 30);
     }
 
@@ -32,20 +33,25 @@ public class DuplicatorPowerup : MonoBehaviour
     [System.Obsolete]
     IEnumerator Debuff() {
         yield return new WaitForSeconds(duplicationTime);
-        GameObject explosion = Instantiate(despawnEffect, dup.transform.position, despawnEffect.transform.rotation);
-        explosion.GetComponent<ParticleSystem>().startColor = Color.red;
-        explosion.GetComponent<ParticleSystem>().Play();
-        dup.SetActive(false);
-        yield return new WaitForSeconds(5);
-        Destroy(dup);
-        Destroy(gameObject);
-        gameObject.SetActive(false);
+        if(dup != null) {
+            GameObject explosion = Instantiate(despawnEffect, dup.transform.position, despawnEffect.transform.rotation);
+            explosion.GetComponent<ParticleSystem>().startColor = Color.red;
+            explosion.GetComponent<ParticleSystem>().Play();
+            dup.SetActive(false);
+            yield return new WaitForSeconds(5);
+            Destroy(dup);
+            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
     }
-
+    
+    bool collected;
     // called from LycaonController because collisions are completely broken
     // on duplicator for some reason
     public void ProcessCollision(GameObject other) {
-        if(other.transform.CompareTag("Lycaon")) {
+        GetComponent<BoxCollider>().enabled = false;
+        if(other.transform.CompareTag("Lycaon") && !collected) {
+            collected = true;
             GetComponent<MeshRenderer>().enabled = false;
             GetComponent<BoxCollider>().enabled = false;
             dup = Instantiate(
@@ -58,8 +64,4 @@ public class DuplicatorPowerup : MonoBehaviour
     }
 
     public float duplicationTime = 10.0f;
-    void OnCollisionEnter(Collision other) {
-        Debug.Log("Collided with something");
-        ProcessCollision(other.gameObject);
-    }
 }

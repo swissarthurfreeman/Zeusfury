@@ -40,9 +40,9 @@ public class LycaonController : MonoBehaviour
 		if(health <= 0 && !gm.lycaonDead)
 			Die();
 
-		if(_dashCoolDown > 0)
+		if(_dashCoolDown > 0 && name == "LycaonBody")
 			dashCoolDownBar.value = 1 - _dashCoolDown / dashCoolDown;
-		else
+		else if(name == "LycaonBody")
 			dashCoolDownBar.value = 1;
 	}
 
@@ -67,6 +67,8 @@ public class LycaonController : MonoBehaviour
 		} else if(hit.gameObject.CompareTag("DuplicatorPowerup")) {
 			Debug.Log("Lycaon collided with a potion");
 			hit.gameObject.GetComponent<DuplicatorPowerup>().ProcessCollision(gameObject);
+		} else if(hit.gameObject.CompareTag("SpeedPowerup")) {
+			hit.gameObject.GetComponent<SpeedPowerup>().ProcessCollision(gameObject);
 		}
 	}
 
@@ -150,9 +152,9 @@ public class LycaonController : MonoBehaviour
 	public Slider healthBar;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
-		if(health < 0)
+		if(health < 0 && name == "LycaonBody")
 			healthBar.value = 0;
-		else
+		else if(name == "LycaonBody")
 			healthBar.value = health / 100.0f;	// fucking horrendous bug
 	}
 
