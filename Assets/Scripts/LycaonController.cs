@@ -70,6 +70,9 @@ public class LycaonController : MonoBehaviour
 		} else if(hit.gameObject.CompareTag("SpeedPowerup")) {
 			hit.gameObject.GetComponent<SpeedPowerup>().ProcessCollision(gameObject);
 		}
+
+		if(transform.position.y < -30)
+			Die();
 	}
 
 	private GameManager gm;
@@ -123,6 +126,8 @@ public class LycaonController : MonoBehaviour
 	public float _dashCoolDown;
 	public float dashBreadth = 10.0f;
 	public Slider dashCoolDownBar;
+
+    [Obsolete]
     private void Move() {
 		float vertInput = Input.GetAxis("LycaonMove");
 		float horiInput = Input.GetAxis("LycaonRotate");
@@ -143,10 +148,18 @@ public class LycaonController : MonoBehaviour
 		}
 
 		if(Input.GetKeyDown(KeyCode.LeftControl) && _dashCoolDown < 0) {	// Dash mechanic
+			ParticleSystem start = Instantiate(dashParticleGameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+			start.startColor = Color.green;
+			start.Play();
 			_controller.Move(transform.forward * dashBreadth);
+			ParticleSystem end = Instantiate(dashParticleGameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
+			end.startColor = Color.black;
+			end.Play();
 			_dashCoolDown = dashCoolDown;
 		}
 	}
+
+	public GameObject dashParticleGameObject;
 
 	public float health = 100.0f;
 	public Slider healthBar;

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3914654722358277226}
   - component: {fileID: 5801410351936450178}
   - component: {fileID: 8533318204290946708}
+  - component: {fileID: 6379332087234595605}
   m_Layer: 0
   m_Name: DuplicatorPowerup
   m_TagString: DuplicatorPowerup
@@ -129,3 +130,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   despawnEffect: {fileID: 2630815748524575241, guid: cb7cd9b0c56a24d49a40784bd3203ae6, type: 3}
   duplicationTime: 10
+--- !u!114 &6379332087234595605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060086720380367179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc412bed6d1d84d4cb24d3489ab8ccfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 60
