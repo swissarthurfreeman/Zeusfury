@@ -171,6 +171,7 @@ public class ZeusController : MonoBehaviour
                 }
             }
 
+            GameObject.Find("Accuracy").GetComponent<collector>().Process(raycast.Value.point, LycaonBody.transform.position);
             lightningSource.pitch = Random.Range(1f, 3.0f);       // play lightning sound
             lightningSource.Play();
         }
