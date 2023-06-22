@@ -18,12 +18,18 @@ public class MenuManager : MonoBehaviour
     public AudioClip gameMusic;
     private AudioSource audioSource;
 
+    //public GameObject LycaonHealth;
+    public GameObject LightningCoolDown;
+    public GameObject DashCoolDown;
     public void PlayGame() {
         Time.timeScale = 1;
         audioSource.Stop();
-        Debug.Log("PLAY MUSIC NOW");
         audioSource.clip = gameMusic;
         audioSource.Play();
+        
+        //LycaonHealth.SetActive(true);
+        DashCoolDown.SetActive(true);
+        LightningCoolDown.SetActive(true);
         Toggle();
     }
 

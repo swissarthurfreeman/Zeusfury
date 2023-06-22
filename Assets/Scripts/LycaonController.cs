@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,9 +29,11 @@ public class LycaonController : MonoBehaviour
 		LycaonBodyAnimator = LycaonBody.GetComponent<Animator>();
 		gm = GameObject.Find("[GameManager]").GetComponent<GameManager>();
 		manager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
+		_dashCoolDown = dashCoolDown;
     }
 
 	private void Update() {
+		_dashCoolDown -= Time.deltaTime;
 		JumpAndGravity();
 		Move();
 		if(health <= 0 && !gm.lycaonDead)
@@ -105,6 +108,10 @@ public class LycaonController : MonoBehaviour
 			verticalVelocity -= gravityValue * Time.deltaTime;	// apply gravity always, to let us track down ramps properly
 	}
 
+	public float dashCoolDown = 1.0f;
+	public float _dashCoolDown;
+	public float dashBreadth = 10.0f;
+
     private void Move() {
 		float vertInput = Input.GetAxis("LycaonMove");
 		float horiInput = Input.GetAxis("LycaonRotate");
@@ -123,12 +130,26 @@ public class LycaonController : MonoBehaviour
 			LycaonBodyAnimator.SetBool("Static_b", true);
 			LycaonBodyAnimator.SetFloat("Speed_f", 0f);
 		}
+
+		if(Input.GetKeyDown(KeyCode.LeftControl) && _dashCoolDown < 0) {	// Dash mechanic
+			_controller.Move(transform.forward * dashBreadth);
+			_dashCoolDown = dashCoolDown;
+		}
 	}
 
 	public float health = 100.0f;
+	public Slider healthBar;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
-		Debug.Log("Lycaon Health = " + health.ToString());
+		Debug.Log(health);
+		if(health < 0) {
+			healthBar.value = 0;
+			Debug.Log("Lycaon in heaven");
+		} else {
+			healthBar.value = health / 100.0f;	// fucking horrendous bug
+			Debug.Log("SLIDER ASSIGNEMENT");
+		}
+		Debug.Log(healthBar.value);
 	}
 
 	public float HeartRate;

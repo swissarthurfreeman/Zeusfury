@@ -32,14 +32,24 @@ public class ZeusController : MonoBehaviour
         zlim = GameObject.Find("Zeus").transform.position.z - 100;
         gameSpeed = GameObject.Find("[GameManager]").GetComponent<GameManager>().gameSpeed;
         lightningSource = GetComponent<AudioSource>();
+        _lightningCooldown = lightningCooldown;
     }
 
     void Update() {
+        if(Time.timeScale == 0) return;
+        // e.g. if he's waiting on cooldown before being able to shoot, don't display cursor
+        Debug.Log("Hello");
+        if(mana > lightningManaCost && lightningCooldown > 0)   
+            Cursor.visible = false;
+        else
+            Cursor.visible = true;  // so if nectar has spawned or he can shoot, display pointer
+
         UpdateZeusRange();
         UpdateMana();
     }
 
     void UpdateMana() {
+        lightningCooldown -= Time.deltaTime;
         mana -= Time.deltaTime;     // naturally decrease mana as Zeus advances, TODO : add mana bar
         if(mana < lightningManaCost)
             SpawnNectar();
@@ -98,13 +108,18 @@ public class ZeusController : MonoBehaviour
     }
 
     [Tooltip("Distance beyond the which Lycaon doesn't receive damage from Lightning strikes.")]
-    public float lightningDamageMaxDist = 1.0f; 
+    public float lightningDamageMaxDist = 1.0f;
+    public float lightningCooldown = 2.0f;
+    [SerializeField]
+    private float _lightningCooldown;  
     public GameObject ExplosionSmoke;
+    public int impatience = 1;  // if clicks multiple times in a row, punish Zeus
 
     [System.Obsolete]
     void LightningStrike() {
         System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
-        if(hitPoint.HasValue) {
+        if(hitPoint.HasValue && lightningCooldown < 0) {
+            lightningCooldown = _lightningCooldown;                                     // reset cooldown
             mana -= lightningManaCost;
             GameObject start = LightningPrefab.transform.GetChild(0).gameObject;        // configure lightning bolt
             start.transform.position = transform.position + new Vector3(0, 0, 10);
@@ -126,7 +141,6 @@ public class ZeusController : MonoBehaviour
                     invincible = true;
             }
 
-            print(invincible);
             // lightning may also damage clones
             foreach(var lyc in lycaons) {
                 if(!(invincible && lyc.name == "LycaonBody")) {
