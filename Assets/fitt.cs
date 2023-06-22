@@ -12,9 +12,11 @@ public class fitt : MonoBehaviour
 	private GameObject nectar;
 	private string csvFilePath;
 	private Stopwatch stopwatch;
+	private Stopwatch game_time;
 	private Vector3 mousePosition;
     private GameObject lighting_end;
 	private float elapsedTime;
+	private float time_marker;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,10 @@ public class fitt : MonoBehaviour
 		csvFilePath = Path.Combine(Application.dataPath, "fitt.csv");
 		spawned = false;
 		lighting_end = GameObject.Find("LightningEnd");
+		
+		// Initialisez le chronomètre
+		game_time = new Stopwatch();
+		game_time.Start();
     }
 
     // Update is called once per frame
@@ -48,6 +54,7 @@ public class fitt : MonoBehaviour
 
 				// Obtenir le temps écoulé depuis le début du jeu
 				elapsedTime = stopwatch.ElapsedMilliseconds / 1000f;
+				time_marker = game_time.ElapsedMilliseconds / 1000f;
 				stopwatch.Stop();
 				save_data();
 		}
@@ -72,7 +79,7 @@ public class fitt : MonoBehaviour
 		// Écrire les positions et le temps dans le fichier CSV
 		string[] data = { mousePosition.x.ToString(), mousePosition.y.ToString(), mousePosition.z.ToString(),
 						  position.x.ToString(), position.y.ToString(), position.z.ToString(),
-						  elapsedTime.ToString(), width.ToString() };
+						  elapsedTime.ToString(), width.ToString(), time_marker.ToString() };
 
 		string csvLine = string.Join(",", data);
 
@@ -82,7 +89,7 @@ public class fitt : MonoBehaviour
 		{
 			if (!fileExists)
 			{
-				string header = "MouseX,MouseY,MouseZ,nectarX,nectarY,nectarZ,ElapsedTime,width";
+				string header = "MouseX,MouseY,MouseZ,nectarX,nectarY,nectarZ,TaskTime,width,GameTime";
 				sw.WriteLine(header);
 			}
 
