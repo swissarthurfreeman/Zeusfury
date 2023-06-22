@@ -6830,7 +6830,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06ede2f67caa2a4e81f3d0d0c8986ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSpeed: 0
+  gameSpeed: 5
   startStrip: {fileID: 1992595718}
   stripPrefabs:
   - {fileID: 7203603969145912090, guid: 5d052b19d7f65c440a48df86591d20a7, type: 3}
@@ -13037,9 +13037,11 @@ MonoBehaviour:
   mana: 100
   lightningManaCost: 30
   coolDownBar: {fileID: 818874021}
-  Nectar: {fileID: 4112223443246871941, guid: 425c1d4a9cce2a541aa3c2b22b2d4fc6, type: 3}
+  nectarSpawned: 0
+  Nectar: {fileID: 4655959220702852092, guid: 7fcdce6e519e7fa4c9edc8291ead4bec, type: 3}
+  collectionTime: 0
   lightningDamageMaxDist: 5
-  lightningCooldown: 2
+  lightningCooldown: 1
   _lightningCooldown: 0
   ExplosionSmoke: {fileID: 2630815748524575241, guid: cb7cd9b0c56a24d49a40784bd3203ae6, type: 3}
   impatience: 1

@@ -11,7 +11,6 @@ public class fitt : MonoBehaviour
 	private Vector3 position;
 	private GameObject nectar;
 	private string csvFilePath;
-	private Stopwatch stopwatch;
 	private Stopwatch game_time;
 	private Vector3 mousePosition;
     private GameObject lighting_end;
@@ -25,53 +24,38 @@ public class fitt : MonoBehaviour
 		spawned = false;
 		lighting_end = GameObject.Find("LightningEnd");
 		
-		// Initialisez le chronomètre
-		game_time = new Stopwatch();
-		game_time.Start();
+			// Initialisez le chronomètre
+			game_time = new Stopwatch();
+			game_time.Start();
     }
 
     // Update is called once per frame
-    void Update()
-    {
-		nectar = GameObject.Find("Nectar(Clone)");
-		if (spawned == false && nectar != null)
-		{
-			// Marquez le nectar comme apparant
-			spawned = true;
 
-			// Initialisez le chronomètre
-			stopwatch = new Stopwatch();
-			stopwatch.Start();
-
+  public void Process(float deltaT) {
+			nectar = GameObject.Find("Nectar(Clone)");
 			// Get the spawn position
 			position = Camera.main.WorldToScreenPoint(nectar.transform.position);
 			width = get_size(nectar);
 			mousePosition = Camera.main.WorldToScreenPoint(lighting_end.transform.position);
-		}
-		else if (spawned == true && nectar == null){
-				// Marquez le nectar comme disparu
-				spawned = false;
 
-				// Obtenir le temps écoulé depuis le début du jeu
-				elapsedTime = stopwatch.ElapsedMilliseconds / 1000f;
-				time_marker = game_time.ElapsedMilliseconds / 1000f;
-				stopwatch.Stop();
-				save_data();
-		}
-    }
+			// Obtenir le temps écoulé depuis le début du jeu
+			elapsedTime = deltaT;
+			time_marker = game_time.ElapsedMilliseconds / 1000f;
+			save_data();
+  }
 
 	private float get_size(GameObject obj){
 		// prendre le renderer de l'objet
-		Renderer targetRenderer = obj.GetComponent<Renderer>();
+		MeshRenderer targetRenderer = obj.GetComponent<MeshRenderer>();
 
 		// la taille de l'objet dans le jeu
 		Vector3 boundSize = targetRenderer.bounds.size;
 		
 		// la taille de l'objet dans la caméra principale
-        Vector3 bottomLeft = Camera.main.WorldToScreenPoint(targetRenderer.bounds.min);
-        Vector3 topRight = Camera.main.WorldToScreenPoint(targetRenderer.bounds.max);
-        Vector2 sizeOnScreen = new Vector2(topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
-        UnityEngine.Debug.Log("La taille de l'objet à l'écran : " + sizeOnScreen);
+    Vector3 bottomLeft = Camera.main.WorldToScreenPoint(targetRenderer.bounds.min);
+    Vector3 topRight = Camera.main.WorldToScreenPoint(targetRenderer.bounds.max);
+    Vector2 sizeOnScreen = new Vector2(topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+    UnityEngine.Debug.Log("La taille de l'objet à l'écran : " + sizeOnScreen);
 		return Mathf.Max(sizeOnScreen.x, sizeOnScreen.y);
 	}
 

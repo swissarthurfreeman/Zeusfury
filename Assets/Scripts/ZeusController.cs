@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class ZeusController : MonoBehaviour
 {
@@ -56,6 +57,8 @@ public class ZeusController : MonoBehaviour
         } else {
             coolDownBar.value = 1.0f - _lightningCooldown / lightningCooldown;
         }
+        
+        collectionTime += Time.deltaTime;
     }
 
     public Slider coolDownBar;
@@ -75,15 +78,18 @@ public class ZeusController : MonoBehaviour
         RaycastHit? pos = GetMouseOrEyeTrackerPoint();
         if(pos.HasValue) {
             Debug.Log("Has Value passed");
+            
             //Ray ray = ZeusCam.ScreenPointToRay(pos.Value);
-            //if(Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("Nectar")) {    // if we hit something that is Nectar.
+            Debug.Log("Hit : " + pos.Value.transform.gameObject.name);
+            if(pos.Value.transform.gameObject.CompareTag("Nectar")) {    // if we hit something that is Nectar.
+                GameObject.Find("Fitt").GetComponent<fitt>().Process(collectionTime);
                 Destroy(pos.Value.transform.gameObject);
                 mana = 100.0f;
-            //}
+            }
         }
     }
 
-    private bool nectarSpawned = false;
+    public bool nectarSpawned = false;
     public GameObject Nectar; // Nectar Island Prefab
     private float minDistDepth = 40;
     private float maxDistDepth = 120;
@@ -91,9 +97,12 @@ public class ZeusController : MonoBehaviour
 
     // Spawn a nectar cloud. Will only spawn if another nectar cloud is
     // not already present.
+    public float collectionTime;
     void SpawnNectar() {
         if(!nectarSpawned) {
             nectarSpawned = true;
+            collectionTime = 0f;
+
             float spawnDistDepth = Random.Range(minDistDepth, maxDistDepth);
             float spawnWidthBreadth = Random.Range(-maxDistBreadth, maxDistBreadth);
             float spawnDistHeight = -Random.Range(5, transform.position.y - 10); // we don't want to spawn Nectar out of range of Zeus
