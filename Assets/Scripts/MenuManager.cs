@@ -21,13 +21,14 @@ public class MenuManager : MonoBehaviour
     //public GameObject LycaonHealth;
     public GameObject LightningCoolDown;
     public GameObject DashCoolDown;
+    public GameObject HealthBar;
     public void PlayGame() {
         Time.timeScale = 1;
         audioSource.Stop();
         audioSource.clip = gameMusic;
         audioSource.Play();
         
-        //LycaonHealth.SetActive(true);
+        HealthBar.SetActive(true);
         DashCoolDown.SetActive(true);
         LightningCoolDown.SetActive(true);
         Toggle();

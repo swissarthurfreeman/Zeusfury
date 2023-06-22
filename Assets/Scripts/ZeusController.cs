@@ -1,5 +1,6 @@
 using DigitalRuby.LightningBolt;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ZeusController : MonoBehaviour
 {
@@ -39,17 +40,26 @@ public class ZeusController : MonoBehaviour
         if(Time.timeScale == 0) return;
         // e.g. if he's waiting on cooldown before being able to shoot, don't display cursor
         Debug.Log("Hello");
-        if(mana > lightningManaCost && lightningCooldown > 0)   
+        if(mana > lightningManaCost && _lightningCooldown > 0)   
             Cursor.visible = false;
         else
             Cursor.visible = true;  // so if nectar has spawned or he can shoot, display pointer
 
         UpdateZeusRange();
         UpdateMana();
+
+        if(_lightningCooldown < 0) {
+            coolDownBar.value = 1;
+        } else {
+            Debug.Log("HERE");
+            Debug.Log(1.0f - _lightningCooldown / lightningCooldown);
+            coolDownBar.value = 1.0f - _lightningCooldown / lightningCooldown;
+        }
     }
 
+    public Slider coolDownBar;
     void UpdateMana() {
-        lightningCooldown -= Time.deltaTime;
+        _lightningCooldown -= Time.deltaTime;
         mana -= Time.deltaTime;     // naturally decrease mana as Zeus advances, TODO : add mana bar
         if(mana < lightningManaCost)
             SpawnNectar();
@@ -118,8 +128,8 @@ public class ZeusController : MonoBehaviour
     [System.Obsolete]
     void LightningStrike() {
         System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
-        if(hitPoint.HasValue && lightningCooldown < 0) {
-            lightningCooldown = _lightningCooldown;                                     // reset cooldown
+        if(hitPoint.HasValue && _lightningCooldown < 0) {
+            _lightningCooldown = lightningCooldown;                                     // reset cooldown
             mana -= lightningManaCost;
             GameObject start = LightningPrefab.transform.GetChild(0).gameObject;        // configure lightning bolt
             start.transform.position = transform.position + new Vector3(0, 0, 10);

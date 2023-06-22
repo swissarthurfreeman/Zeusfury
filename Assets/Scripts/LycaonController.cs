@@ -33,11 +33,17 @@ public class LycaonController : MonoBehaviour
     }
 
 	private void Update() {
+		if(Time.timeScale == 0) return;
 		_dashCoolDown -= Time.deltaTime;
 		JumpAndGravity();
 		Move();
 		if(health <= 0 && !gm.lycaonDead)
 			Die();
+
+		if(_dashCoolDown > 0)
+			dashCoolDownBar.value = 1 - _dashCoolDown / dashCoolDown;
+		else
+			dashCoolDownBar.value = 1;
 	}
 
 	void EndAreaReached() {
@@ -111,7 +117,7 @@ public class LycaonController : MonoBehaviour
 	public float dashCoolDown = 1.0f;
 	public float _dashCoolDown;
 	public float dashBreadth = 10.0f;
-
+	public Slider dashCoolDownBar;
     private void Move() {
 		float vertInput = Input.GetAxis("LycaonMove");
 		float horiInput = Input.GetAxis("LycaonRotate");
@@ -142,13 +148,11 @@ public class LycaonController : MonoBehaviour
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
 		Debug.Log(health);
-		if(health < 0) {
+		if(health < 0)
 			healthBar.value = 0;
-			Debug.Log("Lycaon in heaven");
-		} else {
+		else
 			healthBar.value = health / 100.0f;	// fucking horrendous bug
-			Debug.Log("SLIDER ASSIGNEMENT");
-		}
+		
 		Debug.Log(healthBar.value);
 	}
 
