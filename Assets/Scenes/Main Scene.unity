@@ -4926,7 +4926,7 @@ BoxCollider:
   m_GameObject: {fileID: 830481093}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.9129412, y: 2.5717034, z: 1.0394592}
   m_Center: {x: -0.022958636, y: 1.7692158, z: -0.0566864}
@@ -6785,7 +6785,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c06ede2f67caa2a4e81f3d0d0c8986ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSpeed: 7
+  gameSpeed: 0
   startStrip: {fileID: 1992595718}
   stripPrefabs:
   - {fileID: 7203603969145912090, guid: 5d052b19d7f65c440a48df86591d20a7, type: 3}

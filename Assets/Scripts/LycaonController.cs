@@ -164,7 +164,7 @@ public class LycaonController : MonoBehaviour
 	public float health = 100.0f;
 	public Slider healthBar;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
-		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
+		health -= (float) 10 * (lightningDamageMaxDist/lightningDistance);
 		if(health < 0 && name == "LycaonBody")
 			healthBar.value = 0;
 		else if(name == "LycaonBody")
