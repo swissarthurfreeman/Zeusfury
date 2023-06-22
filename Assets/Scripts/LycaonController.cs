@@ -30,6 +30,7 @@ public class LycaonController : MonoBehaviour
 		gm = GameObject.Find("[GameManager]").GetComponent<GameManager>();
 		manager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
 		_dashCoolDown = dashCoolDown;
+		StartCoroutine(SetSpeedCoRoutine());
     }
 
 	private void Update() {
@@ -190,6 +191,15 @@ public class LycaonController : MonoBehaviour
 	void LateUpdate() {
 		_controller.Move(Vector3.back * Time.deltaTime * gm.gameSpeed);
 	}
+
+    IEnumerator SetSpeedCoRoutine()
+    {
+        while(true)
+        {
+            SetSpeed();
+            yield return new WaitForSeconds(5f);
+        }
+    }
 
 	public void SetSpeed(){
 		string filePath = Path.Combine(Application.dataPath, "value.txt");
