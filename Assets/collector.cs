@@ -20,7 +20,7 @@ public class collector : MonoBehaviour
 		stopwatch = new Stopwatch();
 		stopwatch.Start();
 
-		lycaon = GameObject.Find("Lycaon");
+		lycaon = GameObject.Find("LycaonBody");
 		lighting_end = GameObject.Find("LightningEnd");
 
     }
