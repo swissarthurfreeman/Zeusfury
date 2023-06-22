@@ -28,7 +28,7 @@ class HeartRate(cmd.Cmd):
 
     # COMPUTED
     # group capture by group of size n
-    nSamples = samplig * running_time
+    nSamples = sampling * running_time
     # nb sample per seconds (min 10 otherwise parameter error)
     samplingRate = sampling
     peaks_in_n_sec = (bpm / 60) * running_time
@@ -97,7 +97,7 @@ class HeartRate(cmd.Cmd):
         plt.plot(x)
         plt.plot(peaks, x[peaks], x)
         plt.plot(np.zeros_like(x), "--", color="gray")
-        plt.axhline(x=self.height, color="r", linestyle="--")
+        plt.axhline(self.height, color="r", linestyle="--")
         plt.show()
 
     def do_height(self, inp):

@@ -1,6 +1,9 @@
 using DigitalRuby.LightningBolt;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class ZeusController : MonoBehaviour
 {
@@ -27,6 +30,7 @@ public class ZeusController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gazeTrail = GameObject.Find("[GazeTrail]").GetComponent<Tobii.Research.Unity.GazeTrailBase>();
         Zeus = GameObject.Find("Zeus");
         LycaonBody = GameObject.Find("LycaonBody");
         sky = GameObject.Find("Sky");
@@ -68,13 +72,14 @@ public class ZeusController : MonoBehaviour
     }
 
     void CollectNectar() {
-        if(Input.GetMouseButtonDown(0)) {
-            Vector3 mousePos = Input.mousePosition;
-            Ray ray = ZeusCam.ScreenPointToRay(mousePos);
-            if(Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("Nectar")) {    // if we hit something that is Nectar.
-                Destroy(hit.transform.gameObject);
+        RaycastHit? pos = GetMouseOrEyeTrackerPoint();
+        if(pos.HasValue) {
+            Debug.Log("Has Value passed");
+            //Ray ray = ZeusCam.ScreenPointToRay(pos.Value);
+            //if(Physics.Raycast(ray, out RaycastHit hit) && hit.transform.CompareTag("Nectar")) {    // if we hit something that is Nectar.
+                Destroy(pos.Value.transform.gameObject);
                 mana = 100.0f;
-            }
+            //}
         }
     }
 
@@ -88,7 +93,6 @@ public class ZeusController : MonoBehaviour
     // not already present.
     void SpawnNectar() {
         if(!nectarSpawned) {
-            Debug.Log("Nectar Spawn");
             nectarSpawned = true;
             float spawnDistDepth = Random.Range(minDistDepth, maxDistDepth);
             float spawnWidthBreadth = Random.Range(-maxDistBreadth, maxDistBreadth);
@@ -124,22 +128,23 @@ public class ZeusController : MonoBehaviour
 
     [System.Obsolete]
     void LightningStrike() {
-        System.Nullable<Vector3> hitPoint = GetMouseOrEyeTrackerPoint();
-        if(hitPoint.HasValue && _lightningCooldown < 0) {
+        System.Nullable<RaycastHit> raycast = GetMouseOrEyeTrackerPoint();
+        if(raycast.HasValue && _lightningCooldown < 0) {
             _lightningCooldown = lightningCooldown;                                     // reset cooldown
             mana -= lightningManaCost;
             GameObject start = LightningPrefab.transform.GetChild(0).gameObject;        // configure lightning bolt
             start.transform.position = transform.position + new Vector3(0, 0, 10);
 
             GameObject end = LightningPrefab.transform.GetChild(1).gameObject;
-            end.transform.position = hitPoint.Value;
+            end.transform.position = raycast.Value.point;
 
             LightningBoltScript test = LightningPrefab.GetComponent<LightningBoltScript>();
             test.Trigger();     // Trigger manually triggers the lightning strike with prefab config
             
-            GameObject explosion = Instantiate(ExplosionSmoke, hitPoint.Value, ExplosionSmoke.transform.rotation);
+            GameObject explosion = Instantiate(ExplosionSmoke, raycast.Value.point, ExplosionSmoke.transform.rotation);
             explosion.GetComponent<ParticleSystem>().startColor = Color.yellow;
             explosion.GetComponent<ParticleSystem>().Play();
+            StartCoroutine(DestroyParticles(explosion));
 
             GameObject[] lycaons = GameObject.FindGameObjectsWithTag("Lycaon");
             bool invincible = false;        // lycaon is invincible if he has clones
@@ -151,7 +156,7 @@ public class ZeusController : MonoBehaviour
             // lightning may also damage clones
             foreach(var lyc in lycaons) {
                 if(!(invincible && lyc.name == "LycaonBody")) {
-                    float dist = (hitPoint.Value - lyc.transform.position).magnitude;        // compute distance to Lycaon, deal damage
+                    float dist = (raycast.Value.point - lyc.transform.position).magnitude;        // compute distance to Lycaon, deal damage
                     if(dist < lightningDamageMaxDist)
                         lyc.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
                 }
@@ -162,22 +167,27 @@ public class ZeusController : MonoBehaviour
         }
     }
 
-    // Returns the point that was either gazed at or clicked on
+	IEnumerator DestroyParticles(GameObject game) {
+		yield return new WaitForSeconds(3.0f);
+		Destroy(game);
+	}
+    // Returns the point that was either gazed at or clicked on projected on world map
     // click will override the eye tracker
     // will return null if raycast didn't collide with anything
     // will return null if neither Enter (for eye tracker) or left mouse
     // were triggered
-    System.Nullable<Vector3> GetMouseOrEyeTrackerPoint() {
+    System.Nullable<RaycastHit> GetMouseOrEyeTrackerPoint() {
         if(Input.GetMouseButtonDown(0)) {
             Vector3 mousePos = Input.mousePosition;
             Ray ray = ZeusCam.ScreenPointToRay(mousePos);
             if(Physics.Raycast(ray, out RaycastHit hit)) { // true if intersects a collider
-                return hit.point;
+                return hit;
             }
         }
         
         if(Input.GetKeyDown(KeyCode.Return)) {
-            return gazeTrail.latestHitPoint;    // returns null if no collider was intersected
+            Debug.Log("Latest Hit Point = " + gazeTrail.latestHitPoint.ToString());
+            return gazeTrail.latestHit;    // returns null if no collider was intersected
         }
         return null;
     }

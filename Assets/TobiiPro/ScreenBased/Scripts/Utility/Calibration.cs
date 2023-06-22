@@ -240,10 +240,8 @@ namespace Tobii.Research.Unity
             }
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(_startKey))
-            {
+        private void Update() {
+            if (Input.GetKeyDown(_startKey)) {
                 var calibrationStartResult = StartCalibration(
                     resultCallback: (calibrationResult) =>
                         Debug.Log("Calibration was " + (calibrationResult ? "successful" : "unsuccessful"))

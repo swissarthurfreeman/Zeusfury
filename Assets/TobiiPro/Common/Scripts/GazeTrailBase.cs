@@ -159,7 +159,11 @@ namespace Tobii.Research.Unity
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit))
                     {
+                        latestHit = hit;
                         latestHitPoint = hit.point;
+                        if(Input.GetKeyDown(KeyCode.Return))
+                            Debug.Log(latestHitPoint);
+                        
                         PlaceParticle(hit.point, _color, _particleSize);
                         _latestHitObject = hit.transform;
                     }
@@ -170,6 +174,7 @@ namespace Tobii.Research.Unity
                 }
             }
         }
+        public RaycastHit latestHit;
 
         public Vector3 latestHitPoint;
 

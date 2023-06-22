@@ -5,6 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class LycaonController : MonoBehaviour
 {
@@ -124,7 +127,7 @@ public class LycaonController : MonoBehaviour
 	}
 
 	public float dashCoolDown = 1.0f;
-	public float _dashCoolDown;
+	private float _dashCoolDown;
 	public float dashBreadth = 10.0f;
 	public Slider dashCoolDownBar;
 
@@ -137,7 +140,7 @@ public class LycaonController : MonoBehaviour
 			transform.Rotate(Vector3.up, -horiInput * rotateSpeed * Time.deltaTime);
 		
 		_controller.Move(
-			transform.forward * vertInput * (moveSpeed * Time.deltaTime)
+			transform.forward * vertInput * ( (moveSpeed + bpmSpeed) * Time.deltaTime)
 		);
 
 		if(_controller.velocity.magnitude > 0) {
@@ -151,13 +154,22 @@ public class LycaonController : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.LeftControl) && _dashCoolDown < 0) {	// Dash mechanic
 			ParticleSystem start = Instantiate(dashParticleGameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 			start.startColor = Color.green;
+			StartCoroutine(DestroyParticles(start.gameObject));
 			start.Play();
+
 			_controller.Move(transform.forward * dashBreadth);
 			ParticleSystem end = Instantiate(dashParticleGameObject, transform.position, transform.rotation).GetComponent<ParticleSystem>();
 			end.startColor = Color.black;
 			end.Play();
+			
+			StartCoroutine(DestroyParticles(end.gameObject));
 			_dashCoolDown = dashCoolDown;
 		}
+	}
+
+	IEnumerator DestroyParticles(GameObject game) {
+		yield return new WaitForSeconds(3.0f);
+		Destroy(game);
 	}
 
 	public GameObject dashParticleGameObject;
@@ -200,7 +212,7 @@ public class LycaonController : MonoBehaviour
             yield return new WaitForSeconds(5f);
         }
     }
-
+	private float bpmSpeed;
 	public void SetSpeed(){
 		string filePath = Path.Combine(Application.dataPath, "value.txt");
 		if (File.Exists(filePath))
@@ -212,8 +224,7 @@ public class LycaonController : MonoBehaviour
 					string firstLine = reader.ReadLine();
 					if (float.TryParse(firstLine, out float value))
 					{
-						Debug.Log(value);
-						moveSpeed = moveSpeed + (8.0f * (value - 1));
+						bpmSpeed = 4.0f * (value - 1);
 					}
 					else
 					{
