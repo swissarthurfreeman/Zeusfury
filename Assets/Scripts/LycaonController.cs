@@ -64,6 +64,9 @@ public class LycaonController : MonoBehaviour
 			Die();
 		} else if(hit.gameObject.CompareTag("Tartarus")) {
 			EndAreaReached();
+		} else if(hit.gameObject.CompareTag("DuplicatorPowerup")) {
+			Debug.Log("Lycaon collided with a potion");
+			hit.gameObject.GetComponent<DuplicatorPowerup>().ProcessCollision(gameObject);
 		}
 	}
 
@@ -147,13 +150,10 @@ public class LycaonController : MonoBehaviour
 	public Slider healthBar;
 	public void TakeDamage(float lightningDistance, float lightningDamageMaxDist) {	// called from ZeusController on Lightning strike.
 		health -= (float) Math.Pow(lightningDamageMaxDist/lightningDistance, 4.0f);
-		Debug.Log(health);
 		if(health < 0)
 			healthBar.value = 0;
 		else
 			healthBar.value = health / 100.0f;	// fucking horrendous bug
-		
-		Debug.Log(healthBar.value);
 	}
 
 	public float HeartRate;

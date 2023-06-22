@@ -39,7 +39,6 @@ public class ZeusController : MonoBehaviour
     void Update() {
         if(Time.timeScale == 0) return;
         // e.g. if he's waiting on cooldown before being able to shoot, don't display cursor
-        Debug.Log("Hello");
         if(mana > lightningManaCost && _lightningCooldown > 0)   
             Cursor.visible = false;
         else
@@ -51,8 +50,6 @@ public class ZeusController : MonoBehaviour
         if(_lightningCooldown < 0) {
             coolDownBar.value = 1;
         } else {
-            Debug.Log("HERE");
-            Debug.Log(1.0f - _lightningCooldown / lightningCooldown);
             coolDownBar.value = 1.0f - _lightningCooldown / lightningCooldown;
         }
     }

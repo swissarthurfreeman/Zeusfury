@@ -10,6 +10,7 @@ TagManager:
   - Zeus
   - Tartarus
   - SpeedPowerup
+  - DuplicatorPowerup
   layers:
   - Default
   - TransparentFX

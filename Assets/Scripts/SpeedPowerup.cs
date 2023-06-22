@@ -26,6 +26,7 @@ public class SpeedPowerup : MonoBehaviour
 
     private float deltaSpeed;
     void OnCollisionEnter(Collision other) {
+        Debug.Log("Collided with something");
         if(other.gameObject.CompareTag("Lycaon")) {
             GetComponent<MeshRenderer>().enabled = false;
             deltaSpeed = ctrl.moveSpeed * speedMultiplier;
