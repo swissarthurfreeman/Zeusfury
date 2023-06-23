@@ -39,6 +39,7 @@ public class ZeusController : MonoBehaviour
         gameSpeed = GameObject.Find("[GameManager]").GetComponent<GameManager>().gameSpeed;
         lightningSource = GetComponent<AudioSource>();
         _lightningCooldown = lightningCooldown;
+        invincible = false;
     }
 
     void Update() {
@@ -155,28 +156,19 @@ public class ZeusController : MonoBehaviour
             explosion.GetComponent<ParticleSystem>().Play();
             StartCoroutine(DestroyParticles(explosion));
 
-            GameObject[] lycaons = GameObject.FindGameObjectsWithTag("Lycaon");
-            bool invincible = false;        // lycaon is invincible if he has clones
-            foreach(GameObject lyc in lycaons) {
-                if(lyc.name != "LycaonBody" && lyc.GetComponent<LycaonController>().health > 0)    // e.g. if there's a clone
-                    invincible = true;
+            if(!invincible) {
+                float dist = (raycast.Value.point - LycaonBody.transform.position).magnitude;        // compute distance to Lycaon, deal damage
+                if(dist < lightningDamageMaxDist)
+                    LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
             }
-
-            // lightning may also damage clones
-            foreach(var lyc in lycaons) {
-                if(!(invincible && lyc.name == "LycaonBody")) {
-                    float dist = (raycast.Value.point - lyc.transform.position).magnitude;        // compute distance to Lycaon, deal damage
-                    if(dist < lightningDamageMaxDist)
-                        lyc.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
-                }
-            }
-
+            
             GameObject.Find("Accuracy").GetComponent<collector>().Process(raycast.Value.point, LycaonBody.transform.position);
             lightningSource.pitch = Random.Range(1f, 3.0f);       // play lightning sound
             lightningSource.Play();
         }
     }
 
+    public bool invincible;
 	IEnumerator DestroyParticles(GameObject game) {
 		yield return new WaitForSeconds(3.0f);
 		Destroy(game);
