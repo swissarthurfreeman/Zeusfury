@@ -7,23 +7,16 @@ public class GameManager : MonoBehaviour
 {
     public float gameSpeed;
     private GameObject Zeus;
-    private GameObject LycaonBody;
-    private CharacterController LycaonCharControl;
     public GameObject startStrip;
     public List<GameObject> stripPrefabs;
     public Queue<GameObject> strips = new Queue<GameObject>();
-    private GameObject bitalinoCanvas;
     private float zlim;
-    private MenuManager mainMenuManager;
 
     // Start is called before the first frame update
     void Start()
     {    
         Time.timeScale = 0;
-        LycaonBody = GameObject.Find("LycaonBody");
-        LycaonCharControl = LycaonBody.GetComponent<CharacterController>();
         Zeus = GameObject.Find("Zeus");
-        mainMenuManager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
         strips.Enqueue(startStrip);
         
         spawnStrip();
@@ -103,10 +96,6 @@ public class GameManager : MonoBehaviour
         Bounds newStripBounds = newStrip.GetComponent<BoxCollider>().bounds;        // ACCESS BOUNDS ON INSTANTIATED !
         newStrip.transform.position = strips.ToArray()[strips.Count-1].transform.position + Vector3.forward * (precStripBounds.size.z+newStripBounds.size.z) / 2;  // IT'S THE HALF WIDTH !
         strips.Enqueue(newStrip);
-    }
-
-    void LateUpdate() {
-        //LycaonCharControl.Move(Vector3.back * Time.deltaTime * gameSpeed);
     }
 
     int mod(int x, int m) {

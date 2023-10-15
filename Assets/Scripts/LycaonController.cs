@@ -2,12 +2,8 @@ using System;
 using System.IO;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class LycaonController : MonoBehaviour
 {
@@ -18,7 +14,6 @@ public class LycaonController : MonoBehaviour
 	public float rotateSpeed = 100;    
 	[SerializeField]
 	private float verticalVelocity;
-    private float groundedTimer;        // to allow jumping when going down ramps
     public float jumpHeight = 8.0f;
     public float gravityValue = 9.81f;
 	private CharacterController _controller;
@@ -31,7 +26,6 @@ public class LycaonController : MonoBehaviour
 		GameObject mainPanel = GameObject.Find("MainPanel");
 		LycaonBodyAnimator = LycaonBody.GetComponent<Animator>();
 		gm = GameObject.Find("[GameManager]").GetComponent<GameManager>();
-		manager = GameObject.Find("MainMenu").GetComponent<MenuManager>();
 		_dashCoolDown = dashCoolDown;
 		StartCoroutine(SetSpeedCoRoutine());
     }
@@ -80,7 +74,6 @@ public class LycaonController : MonoBehaviour
 	}
 
 	private GameManager gm;
-	private MenuManager manager;
 
 	private void Die() {
 		LycaonBodyAnimator.SetBool("Death_b", true);
@@ -183,8 +176,6 @@ public class LycaonController : MonoBehaviour
 		else if(name == "LycaonBody")
 			healthBar.value = health / 100.0f;	// fucking horrendous bug
 	}
-
-	public float HeartRate;
 	private int _n_beats = 0;
 	private int _n_counts = 0;
 	public void Print(int value) {
