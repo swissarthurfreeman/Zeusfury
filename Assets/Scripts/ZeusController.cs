@@ -3,14 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
 
 public class ZeusController : MonoBehaviour
 {
     public Camera ZeusCam;
     public GameObject LightningPrefab;
-    public Tobii.Research.Unity.GazeTrailBase gazeTrail;
 
     [SerializeField]
     private float zeusSpeed;
@@ -31,7 +29,6 @@ public class ZeusController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gazeTrail = GameObject.Find("[GazeTrail]").GetComponent<Tobii.Research.Unity.GazeTrailBase>();
         Zeus = GameObject.Find("Zeus");
         LycaonBody = GameObject.Find("LycaonBody");
         sky = GameObject.Find("Sky");
@@ -58,8 +55,6 @@ public class ZeusController : MonoBehaviour
         } else {
             coolDownBar.value = 1.0f - _lightningCooldown / lightningCooldown;
         }
-        
-        collectionTime += Time.deltaTime;
     }
 
     public Slider coolDownBar;
@@ -83,7 +78,6 @@ public class ZeusController : MonoBehaviour
             //Ray ray = ZeusCam.ScreenPointToRay(pos.Value);
             Debug.Log("Hit : " + pos.Value.transform.gameObject.name);
             if(pos.Value.transform.gameObject.CompareTag("Nectar")) {    // if we hit something that is Nectar.
-                GameObject.Find("Fitt").GetComponent<fitt>().Process(collectionTime);
                 Destroy(pos.Value.transform.gameObject);
                 mana = 100.0f;
             }
@@ -98,11 +92,9 @@ public class ZeusController : MonoBehaviour
 
     // Spawn a nectar cloud. Will only spawn if another nectar cloud is
     // not already present.
-    public float collectionTime;
     void SpawnNectar() {
         if(!nectarSpawned) {
             nectarSpawned = true;
-            collectionTime = 0f;
 
             float spawnDistDepth = Random.Range(minDistDepth, maxDistDepth);
             float spawnWidthBreadth = Random.Range(-maxDistBreadth, maxDistBreadth);
@@ -162,7 +154,6 @@ public class ZeusController : MonoBehaviour
                     LycaonBody.GetComponent<LycaonController>().TakeDamage(dist, lightningDamageMaxDist);
             }
             
-            GameObject.Find("Accuracy").GetComponent<collector>().Process(raycast.Value.point, LycaonBody.transform.position);
             lightningSource.pitch = Random.Range(1f, 3.0f);       // play lightning sound
             lightningSource.Play();
         }
@@ -187,14 +178,6 @@ public class ZeusController : MonoBehaviour
             if(Physics.Raycast(ray, out RaycastHit hit)) { // true if intersects a collider
                 return hit;
             }
-        }
-        
-        if(gazeTrail.latestHitPoint != null) {
-            cursor.transform.position = gazeTrail.latestHitPoint;
-            if(Input.GetKeyDown(KeyCode.Return)) {
-                Debug.Log("Latest Hit Point = " + gazeTrail.latestHitPoint.ToString());
-                return gazeTrail.latestHit;    // returns null if no collider was intersected
-            }    
         }
         return null;
     }

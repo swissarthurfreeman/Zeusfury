@@ -35,5 +35,5 @@ This game was developed for the sake of answering a research question in an acad
 1) *Does Fitts’s law work with an eye tracking modality?*
 2) *Are instant point and click based games better adapted to eye tracking modalities than mouse ?*
 
-To this end we measured two quantities to answer these questions : the avera
+To this end we measured two quantities to answer these questions : the time it took for Zeus to pick up nectar as soon as it appeared, and the accuracy with the which Zeus was hitting Lycaon. The results of our experiment, and our conclusions are all detailed in our paper. 
 

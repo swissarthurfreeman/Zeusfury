@@ -27,7 +27,6 @@ public class LycaonController : MonoBehaviour
 		LycaonBodyAnimator = LycaonBody.GetComponent<Animator>();
 		gm = GameObject.Find("[GameManager]").GetComponent<GameManager>();
 		_dashCoolDown = dashCoolDown;
-		StartCoroutine(SetSpeedCoRoutine());
     }
 
 	private void Update() {
@@ -36,6 +35,9 @@ public class LycaonController : MonoBehaviour
 		JumpAndGravity();
 		Move();
 		if(health <= 0 && !gm.lycaonDead)
+			Die();
+
+		if(transform.position.y < -10)
 			Die();
 
 		if(_dashCoolDown > 0 && name == "LycaonBody")
@@ -68,9 +70,6 @@ public class LycaonController : MonoBehaviour
 		} else if(hit.gameObject.CompareTag("SpeedPowerup")) {
 			hit.gameObject.GetComponent<SpeedPowerup>().ProcessCollision(gameObject);
 		}
-
-		if(transform.position.y < -30)
-			Die();
 	}
 
 	private GameManager gm;
@@ -133,7 +132,7 @@ public class LycaonController : MonoBehaviour
 			transform.Rotate(Vector3.up, -horiInput * rotateSpeed * Time.deltaTime);
 		
 		_controller.Move(
-			transform.forward * vertInput * ( (moveSpeed + bpmSpeed) * Time.deltaTime)
+			transform.forward * vertInput * ( (moveSpeed) * Time.deltaTime)
 		);
 
 		if(_controller.velocity.magnitude > 0) {
@@ -195,42 +194,4 @@ public class LycaonController : MonoBehaviour
 		_controller.Move(Vector3.back * Time.deltaTime * gm.gameSpeed);
 	}
 
-    IEnumerator SetSpeedCoRoutine()
-    {
-        while(true)
-        {
-            SetSpeed();
-            yield return new WaitForSeconds(5f);
-        }
-    }
-	private float bpmSpeed;
-	public void SetSpeed(){
-		string filePath = Path.Combine(Application.dataPath, "value.txt");
-		if (File.Exists(filePath))
-		{
-			try
-			{
-				using (StreamReader reader = new StreamReader(filePath))
-				{
-					string firstLine = reader.ReadLine();
-					if (float.TryParse(firstLine, out float value))
-					{
-						bpmSpeed = 4.0f * (value - 1);
-					}
-					else
-					{
-						Debug.Log("La première ligne ne contient pas un numéro valide.");
-					}
-				}
-			}
-			catch (System.Exception ex)
-			{
-				Debug.Log("collision: read again");
-			}
-		}
-		else
-		{
-			Debug.Log("Le fichier n'existe pas.");
-		}
-	}
 }
